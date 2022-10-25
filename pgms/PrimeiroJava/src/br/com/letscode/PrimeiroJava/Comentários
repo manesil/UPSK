@@ -1,0 +1,16 @@
+/*
+
+
+Modificadores de acesso aos métodos
+
+default  : dentro do pacote
+private  : dentro da própria classe
+public   : em qualquer parte do código
+protected: apenas com herança
+
+
+Teclas
+SHIFT+F6 faz alteração em o código quando estamos renomeando
+
+*/
+
