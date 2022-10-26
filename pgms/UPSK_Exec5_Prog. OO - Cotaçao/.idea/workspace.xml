@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="9a5064b7-0653-4d8c-bc54-0b22c3a019af" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../PrimeiroJava/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PrimeiroJava/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PrimeiroJava/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PrimeiroJava/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UP-JV-001-MaiorString/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UPSK_Exec4_ProgOO - Cesta de produtos/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UPSK_Exec4_ProgOO - Cesta de produtos/.idea/libraries/ProgOO___Cesta_de_produtos.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UPSK_Exec4_ProgOO - Cesta de produtos/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UPSK_Exec4_ProgOO - Cesta de produtos/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UPSK_Exec4_ProgOO - Cesta de produtos/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/UPSK_Exec5_Prog_OO_Cotacao.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../modulo1-itau-projeto1/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../modulo1-itau-projeto1/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../modulo1-itau-projeto1/.idea/vcs.xml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="ProjectId" id="2GbtFf7nm7xoRKluyLL8dSFIcz0" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/Usuários/manes/Documents/GIT/UPSK/pgms/UPSK_Exec5_Prog. OO - Cotaçao&quot;
+  }
+}</component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="9a5064b7-0653-4d8c-bc54-0b22c3a019af" name="Changes" comment="" />
+      <created>1666669009242</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1666669009242</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
