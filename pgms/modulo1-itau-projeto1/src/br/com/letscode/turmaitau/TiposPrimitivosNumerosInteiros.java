@@ -8,7 +8,7 @@ public class TiposPrimitivosNumerosInteiros {
             multiplicacao *
          */
 
-    final static int NUMERO_INT = 6;
+    final static int NUMERO_INT = 5;
     final static String RESULTADO = "resultado da operacao ";
 
 
