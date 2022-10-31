@@ -3,6 +3,7 @@ package br.com.upsk.chapametalica.dois;
 import java.util.Scanner;
 
 public class ChapaMetalicaDois{
+    // Teste Pull Request Bruna Marcieli Barbosa
         static float[] linha = new float[]{20,0,0,0,0,20};
         static float[] coluna = new float[]{100,0,0,0,-3};
         static final float VALOR_ERRO = (float) 0.5;
