@@ -53,4 +53,5 @@ public class ChapaMetalicaUm {
             mediaTemperaturasAnt = mediaTemperaturas;
         }
     }
+
 }
