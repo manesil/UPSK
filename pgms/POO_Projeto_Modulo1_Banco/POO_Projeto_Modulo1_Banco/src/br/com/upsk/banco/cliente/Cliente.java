@@ -1,0 +1,66 @@
+package br.com.upsk.banco.cliente;
+
+import br.com.upsk.banco.conta.Conta;
+
+import java.math.BigDecimal;
+import java.security.PrivateKey;
+import java.util.ArrayList;
+import java.util.Random;
+
+//TODO: IZA Chamadas metodo conta
+public class Cliente {
+
+    private String idCliente;
+    private String tipoCliente;
+    private String nomeCliente;
+    private Conta conta;
+    private ArrayList<Integer> contas = new ArrayList<>();
+
+    public Cliente(){
+
+    }
+
+    public Cliente(String idCliente, String tipo, String nomeCliente){
+        setIdCliente(idCliente);
+        setTipoCliente(tipo);
+        setNomeCliente(nomeCliente);
+    }
+
+    public String getIdCliente() {
+        return idCliente;
+    }
+
+    public void setIdCliente(String idCliente) {
+        this.idCliente = idCliente;
+    }
+
+    public String getTipoCliente() {
+        return tipoCliente;
+    }
+
+    public void setTipoCliente(String tipoCliente) {
+        this.tipoCliente = tipoCliente;
+    }
+
+    public String getNomeCliente() {
+        return nomeCliente;
+    }
+
+    public void setNomeCliente(String nomeCliente) {
+        this.nomeCliente = nomeCliente;
+    }
+
+    public Integer abrirConta(String tipo){
+        Random idConta = new Random();
+        Integer intIDConta = idConta.nextInt(1000);
+        conta = new Conta(intIDConta,tipo);
+        contas.add(intIDConta);
+        return intIDConta;
+    }
+    public void efetuarDeposito(Integer idConta, BigDecimal valorDeposito){
+        conta.efetuarDepósito(idConta,valorDeposito,this.conta.getTipo());
+    }
+
+
+
+}
