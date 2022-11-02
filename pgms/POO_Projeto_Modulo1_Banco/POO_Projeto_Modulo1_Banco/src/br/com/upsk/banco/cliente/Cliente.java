@@ -9,6 +9,7 @@ public class Cliente {
     private String idCliente;
     private String tipoCliente;
     private String nomeCliente;
+
     public ArrayList<String> idConta;
 
 
@@ -47,6 +48,7 @@ public class Cliente {
     }
 
     public void abrirConta(String tipo){
+        //conta poupança apenas para pessoa física
         Conta conta = new Conta();
         //TODO Arraylist com abrirConta
     }
