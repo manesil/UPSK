@@ -1,9 +1,6 @@
 package br.com.upsk.banco.pooprojeto.conta;
 
-import br.com.upsk.banco.pooprojeto.cliente.Cliente;
-import br.com.upsk.banco.pooprojeto.cliente.ClientePF;
-import br.com.upsk.banco.pooprojeto.cliente.ClientePJ;
-import br.com.upsk.banco.pooprojeto.cliente.TipoDocumentos;
+import br.com.upsk.banco.pooprojeto.cliente.*;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -22,11 +19,37 @@ public abstract class Conta {
     public Cliente abrirConta(String nome, String documento, TipoDocumentos tipoDocumento) throws Exception {
         Cliente cliente = cadastrarCliente(nome, documento, tipoDocumento);
 
-        ContaCorrente contaCorrente = new ContaCorrente();
+        Conta contaCorrente = new ContaCorrente();
         contaCorrente.setIdConta( gerarIdConta() );
         contaCorrente.setSaldo( new BigDecimal(0.00) );
 
         cliente.associarContaCliente(contaCorrente);
+
+        return cliente;
+    }
+
+    public Cliente abrirConta(Cliente cliente, TipoContas tipoContas, BigDecimal valorDeposito) throws Exception{
+
+        switch (tipoContas){
+            case CONTA_CORRENTE -> {
+                Conta contaCorrente = new ContaCorrente();
+                contaCorrente.setIdConta( gerarIdConta() );
+                contaCorrente.depositar( valorDeposito );
+
+                cliente.associarContaCliente(contaCorrente);
+            }
+            case CONTA_POUPANCA -> {
+                System.out.println("PENDENTE IMPLEMENTAR ABERTURA " + tipoContas);
+
+                if (cliente instanceof ClientePJ){
+                    System.out.println("LEMBRANDO QUE CLIENTEPJ NAO ABRE CONTA POUPANCA");
+                }
+            }
+            case CONTA_INVESTIMENTO -> {
+                System.out.println("PENDENTE IMPLEMENTAR ABERTURA " + tipoContas);
+            }
+            default -> throw new Exception("ERRO: Nao foi possivel abrir uma nova conta para o tipoinformado");
+        }
 
         return cliente;
     }
@@ -65,7 +88,10 @@ public abstract class Conta {
     }
 
     protected void atualizarSaldo(BigDecimal valorPararAtualizarSaldo){
-        this.setSaldo(valorPararAtualizarSaldo.setScale(SCALE, RoundingMode.UP));
+        if (valorPararAtualizarSaldo != null)
+            this.setSaldo(valorPararAtualizarSaldo.setScale(SCALE, RoundingMode.UP));
+        else
+            this.setSaldo(new BigDecimal(0.00));
     }
 
     public BigDecimal consultarSaldo() {
