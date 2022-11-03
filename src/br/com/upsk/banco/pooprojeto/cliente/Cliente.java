@@ -4,6 +4,7 @@ import br.com.upsk.banco.pooprojeto.conta.Conta;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.ArrayList;
 
@@ -83,11 +84,29 @@ public abstract class Cliente {
 
     public void imprimir(){
         System.out.println("\n");
-        System.out.println(this);
         System.out.println("###########################################################");
         System.out.println("############### EXTRATO DE CONTAS DO CLIENTE ##############");
         System.out.println("###########################################################");
 
+    }
+
+    public void imprimirResumido() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n");
+        sb.append("---------------------- Resumo do cliente ------------------------\n");
+        sb.append("Nome do Cliente            : ").append(this.getNomeCliente()).append("\n");
+
+        for (Map.Entry<Integer, Conta> contas : this.getContasCliente().entrySet()) {
+            Conta conta = contas.getValue();
+            sb.append("------>Id da Conta         : ").append(conta.getIdConta()).append("\n");
+            sb.append("------>Tipo da Conta       : ").append(conta.getLabelConta()).append("\n");
+            sb.append("------>Saldo da Conta      : ").append(conta.consultarSaldoFormatadoEmMoedaLocal()).append("\n");
+            sb.append("-----------------------------------------------------------------\n");
+        }
+
+        sb.append("\n");
+
+        System.out.println(sb);
     }
 
     @Override
