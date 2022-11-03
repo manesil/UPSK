@@ -2,15 +2,16 @@ package br.com.upsk.banco.pooprojeto.conta;
 
 import br.com.upsk.banco.pooprojeto.cliente.Cliente;
 import br.com.upsk.banco.pooprojeto.cliente.ClientePF;
+import br.com.upsk.banco.pooprojeto.cliente.ClientePJ;
 import br.com.upsk.banco.pooprojeto.cliente.TipoContas;
 
 import java.math.BigDecimal;
 
-public class ContaPoupanca extends Conta{
+public class ContaInvestimento extends Conta{
 
-    public ContaPoupanca(){
+    public ContaInvestimento(){
         super();
-        this.setLabelConta(TipoContas.CONTA_POUPANCA.toString());
+        this.setLabelConta(TipoContas.CONTA_INVESTIMENTO.toString());
     }
 
     @Override
@@ -28,15 +29,19 @@ public class ContaPoupanca extends Conta{
     @Override
     public void investir(Cliente cliente, BigDecimal valorInvestimento)  throws Exception{
         if ( valorInvestimento != null && valorInvestimento.doubleValue() <= 0 ){
-            throw new Exception("INFO: Valor invalido para investimento na " + TipoContas.CONTA_POUPANCA );
+            throw new Exception("INFO: Valor invalido para investimento na " + TipoContas.CONTA_INVESTIMENTO );
         }
         double novoSaldo = this.consultarSaldo().doubleValue() + valorInvestimento.doubleValue();
         this.atualizarSaldo(new BigDecimal(novoSaldo));
     }
 
     private double pegarRendimento(Cliente cliente){
-        double rendimento = ((ClientePF)cliente).RENDIMENTO_POUPANCA.doubleValue();
-
+        double rendimento = 0.00;
+        if (  cliente != null && cliente instanceof ClientePJ){
+            rendimento = ((ClientePJ) cliente).RENDIMENTO_INVESTIMENTO.doubleValue();
+        } else {
+            rendimento = ((ClientePF) cliente).RENDIMENTO_INVESTIMENTO.doubleValue();
+        }
         return rendimento;
     }
 
@@ -69,7 +74,7 @@ public class ContaPoupanca extends Conta{
     public String toString() {
         final StringBuilder sb = new StringBuilder("Conta{");
         sb.append("idConta=").append(getIdConta());
-        sb.append(", Tipo Conta= ").append(TipoContas.CONTA_POUPANCA);
+        sb.append(", Tipo Conta= ").append(TipoContas.CONTA_INVESTIMENTO);
         sb.append(", saldo=R$").append(consultarSaldo());
         sb.append('}');
         return sb.toString();

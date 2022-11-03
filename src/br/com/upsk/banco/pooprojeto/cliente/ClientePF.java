@@ -8,7 +8,8 @@ import java.util.Map;
 public class ClientePF extends Cliente {
 
     public static final String TIPO_DOCUMENTO = "CPF";
-    private static final BigDecimal RENDIMENTO_INVESTIMENTO  = new BigDecimal(0.015);
+    public static final BigDecimal RENDIMENTO_INVESTIMENTO  = new BigDecimal(0.015);
+    public static final BigDecimal RENDIMENTO_POUPANCA  = new BigDecimal(0.01);
 
     public ClientePF(String nomeCliente, String documento) throws Exception {
         super(nomeCliente, documento);
@@ -44,21 +45,21 @@ public class ClientePF extends Cliente {
         super.imprimir();
         StringBuilder sb = new StringBuilder();
         sb.append("\n");
-        sb.append("Identificação do Cliente       : ").append(this.getIdCliente() + "\n");
-        sb.append("Nome do Cliente                : ").append(this.getNomeCliente() + "\n");
-        sb.append("Documento do Cliente           : ").append(this.getDocumento() + " (Tipo: " + TIPO_DOCUMENTO + ")\n");
+        sb.append("Identificação do Cliente       : ").append(this.getIdCliente()).append("\n");
+        sb.append("Nome do Cliente                : ").append(this.getNomeCliente()).append("\n");
+        sb.append("Documento do Cliente           : ").append(this.getDocumento()).append(" (Tipo: ").append(TIPO_DOCUMENTO).append(")\n");
         sb.append("---Conta(s) do Cliente         : \n\n");
 
         for (Map.Entry<Integer, Conta> contas : this.getContasCliente().entrySet()) {
             Conta conta = contas.getValue();
-            sb.append("------>Identificação da Conta  : ").append(conta.getIdConta() + "\n");
-            sb.append("------>Tipo da Conta           : ").append(conta.getLabelConta() + "\n");
-            sb.append("------>Saldo da Conta          : R$").append(conta.consultarSaldo() + "\n");
+            sb.append("------>Identificação da Conta  : ").append(conta.getIdConta()).append("\n");
+            sb.append("------>Tipo da Conta           : ").append(conta.getLabelConta()).append("\n");
+            sb.append("------>Saldo da Conta          : ").append(conta.consultarSaldoFormatadoEmMoedaLocal()).append("\n");
             sb.append("-----------------------------------------------------------------\n");
         }
 
         sb.append("\n");
 
-        System.out.println(sb.toString());
+        System.out.println(sb);
     }
 }

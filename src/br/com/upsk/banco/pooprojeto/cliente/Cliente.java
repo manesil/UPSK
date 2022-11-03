@@ -16,7 +16,6 @@ public abstract class Cliente {
     private ArrayList<Integer> indexIdContas;
 
     public static final int TOTAL_DISPONIVEL_IDS = 100;
-    public static final BigDecimal RENDIMENTO_POUPANCA  = new BigDecimal(0.01);
 
     public Cliente(String nomeCliente, String documento) throws Exception {
 
@@ -83,6 +82,7 @@ public abstract class Cliente {
     }
 
     public void imprimir(){
+        System.out.println("\n");
         System.out.println(this);
         System.out.println("###########################################################");
         System.out.println("############### EXTRATO DE CONTAS DO CLIENTE ##############");
