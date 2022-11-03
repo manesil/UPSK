@@ -1,15 +1,17 @@
 package br.com.upsk.banco.pooprojeto.conta;
 
 import br.com.upsk.banco.pooprojeto.cliente.Cliente;
+import br.com.upsk.banco.pooprojeto.cliente.ClientePF;
+import br.com.upsk.banco.pooprojeto.cliente.ClientePJ;
 import br.com.upsk.banco.pooprojeto.cliente.TipoContas;
 
 import java.math.BigDecimal;
 
-public class ContaCorrente extends Conta {
+public class ContaInvestimento extends Conta{
 
-    public ContaCorrente(){
+    public ContaInvestimento(){
         super();
-        this.setLabelConta(TipoContas.CONTA_CORRENTE.toString());
+        this.setLabelConta(TipoContas.CONTA_INVESTIMENTO.toString());
     }
 
     @Override
@@ -18,17 +20,29 @@ public class ContaCorrente extends Conta {
             throw new Exception("INFO: Valor de deposito invalido" );
         }
 
-        double novoSaldo =  this.consultarSaldo().doubleValue() + valorDeposito.doubleValue();
+        double rendimento = pegarRendimento(cliente);
+        double valorDepositoComRendimento = valorDeposito.doubleValue() + (valorDeposito.doubleValue() * rendimento);
+        double novoSaldo =  this.consultarSaldo().doubleValue() + valorDepositoComRendimento;
         this.atualizarSaldo(new BigDecimal(novoSaldo));
     }
 
     @Override
     public void investir(Cliente cliente, BigDecimal valorInvestimento)  throws Exception{
         if ( valorInvestimento != null && valorInvestimento.doubleValue() <= 0 ){
-            throw new Exception("INFO: Valor invalido para investimento na " + TipoContas.CONTA_CORRENTE );
+            throw new Exception("INFO: Valor invalido para investimento na " + TipoContas.CONTA_INVESTIMENTO );
         }
         double novoSaldo = this.consultarSaldo().doubleValue() + valorInvestimento.doubleValue();
         this.atualizarSaldo(new BigDecimal(novoSaldo));
+    }
+
+    private double pegarRendimento(Cliente cliente){
+        double rendimento = 0.00;
+        if (  cliente != null && cliente instanceof ClientePJ){
+            rendimento = ((ClientePJ) cliente).RENDIMENTO_INVESTIMENTO.doubleValue();
+        } else {
+            rendimento = ((ClientePF) cliente).RENDIMENTO_INVESTIMENTO.doubleValue();
+        }
+        return rendimento;
     }
 
     @Override
@@ -60,10 +74,9 @@ public class ContaCorrente extends Conta {
     public String toString() {
         final StringBuilder sb = new StringBuilder("Conta{");
         sb.append("idConta=").append(getIdConta());
-        sb.append(", Tipo Conta= ").append(TipoContas.CONTA_CORRENTE);
+        sb.append(", Tipo Conta= ").append(TipoContas.CONTA_INVESTIMENTO);
         sb.append(", saldo=R$").append(consultarSaldo());
         sb.append('}');
         return sb.toString();
     }
-
 }
