@@ -24,11 +24,8 @@ public class ContaCorrente extends Conta {
 
     @Override
     public void investir(Cliente cliente, BigDecimal valorInvestimento)  throws Exception{
-        if ( valorInvestimento != null && valorInvestimento.doubleValue() <= 0 ){
-            throw new Exception("INFO: Valor invalido para investimento na " + TipoContas.CONTA_CORRENTE );
-        }
-        double novoSaldo = this.consultarSaldo().doubleValue() + valorInvestimento.doubleValue();
-        this.atualizarSaldo(new BigDecimal(novoSaldo));
+
+        throw new Exception("ERRO: Não existe a função de investimento para " + this.getLabelConta());
     }
 
     @Override
