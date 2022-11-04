@@ -3,7 +3,7 @@ package br.com.upsk.banco.conta;
 import br.com.upsk.banco.cliente.Cliente;
 
 import java.math.BigDecimal;
-import java.util.Objects;
+import java.math.RoundingMode;
 
 public class Conta {
 
@@ -12,6 +12,7 @@ public class Conta {
     private final static BigDecimal VALOR_RENDIMENTO_POUPANCA_PF = new BigDecimal(0.01);
     private final static BigDecimal VALOR_RENDIMENTO_DEPOSITO_PF = new BigDecimal(0.015);
     private final static BigDecimal VALOR_RENDIMENTO_DEPOSITO_PJ = new BigDecimal(0.035);
+    private final static BigDecimal VALOR_TAXA_SAQUE_PJ = new BigDecimal(0.005);
 
     //Atributos (apenas na classe)
     private Integer idConta;
@@ -61,6 +62,12 @@ public class Conta {
         this.saldoConta = saldoConta;
     }
 
+    private void imprimirSaldo () {
+        System.out.println("---------------------------------------------------------------");
+        System.out.println("SALDO ATUALIZADO: R$ " + getSaldoConta());
+        System.out.println("---------------------------------------------------------------");
+    }
+
     //TODO: Neri
     public void efetuarDepósito(Integer idConta, BigDecimal valorDeposito, String TipoConta){
         //pessoa física rende 1% poupança e 1,5% conta investimento
@@ -72,15 +79,28 @@ public class Conta {
 
         //aplicar rendimento de acordo tipo conta e tipo cliente
         //atualizar saldo
-
+        setSaldoConta(valorDeposito);
 
 
 
     }
 
     //TODO: Bruna
-    public void EfetuarSaque(BigDecimal valorSaque, String idConta){
+    public void efetuarSaque(Integer idConta, BigDecimal valorSaque, String TipoCliente){
         //pessoa juridica paga 0,5%
+        BigDecimal saldo = getSaldoConta();
+        if (TipoCliente == "PF") {
+            saldo = saldo.subtract(valorSaque).setScale(2, RoundingMode.HALF_EVEN);
+            setSaldoConta(saldo);
+            }
+        else if (TipoCliente == "PJ")
+        {
+            BigDecimal saque = valorSaque.multiply(VALOR_TAXA_SAQUE_PJ).add(valorSaque);
+            saldo = saldo.subtract(saque).setScale(2, RoundingMode.HALF_EVEN);
+            setSaldoConta(saldo);
+        }
+        System.out.println("Saque realizado com SUCESSO!");
+        imprimirSaldo();
 
     }
 

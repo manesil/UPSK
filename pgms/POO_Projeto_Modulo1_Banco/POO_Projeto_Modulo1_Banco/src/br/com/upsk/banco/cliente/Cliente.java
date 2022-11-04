@@ -61,6 +61,14 @@ public class Cliente {
         conta.efetuarDepósito(idConta,valorDeposito,this.conta.getTipo());
     }
 
+    public void efetuarSaque(Integer idConta, BigDecimal valorSaque){
+        System.out.println("Passou no efetuar saque Classe Cliente");
+        System.out.println("idConta: " + idConta);
+        System.out.println("valorSaque: " + valorSaque);
+        System.out.println("TipoConta: " + this.conta.getTipo());
+        conta.efetuarSaque(idConta,valorSaque,this.tipoCliente);
+    }
+
 
 
 }
