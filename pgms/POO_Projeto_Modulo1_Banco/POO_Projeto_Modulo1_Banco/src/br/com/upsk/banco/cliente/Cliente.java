@@ -2,16 +2,19 @@ package br.com.upsk.banco.cliente;
 
 import br.com.upsk.banco.conta.Conta;
 
+import java.math.BigDecimal;
+import java.security.PrivateKey;
 import java.util.ArrayList;
+import java.util.Random;
 
+//TODO: IZA Chamadas metodo conta
 public class Cliente {
 
     private String idCliente;
     private String tipoCliente;
     private String nomeCliente;
-
-    public ArrayList<String> idConta;
-
+    private Conta conta;
+    private ArrayList<Integer> contas = new ArrayList<>();
 
     public Cliente(){
 
@@ -47,10 +50,17 @@ public class Cliente {
         this.nomeCliente = nomeCliente;
     }
 
-    public void abrirConta(String tipo){
-        //conta poupança apenas para pessoa física
-        Conta conta = new Conta();
-        //TODO Arraylist com abrirConta
+    public Integer abrirConta(String tipo){
+        Random idConta = new Random();
+        Integer intIDConta = idConta.nextInt(1000);
+        conta = new Conta(intIDConta,tipo);
+        contas.add(intIDConta);
+        return intIDConta;
     }
+    public void efetuarDeposito(Integer idConta, BigDecimal valorDeposito){
+        conta.efetuarDepósito(idConta,valorDeposito,this.conta.getTipo());
+    }
+
+
 
 }
