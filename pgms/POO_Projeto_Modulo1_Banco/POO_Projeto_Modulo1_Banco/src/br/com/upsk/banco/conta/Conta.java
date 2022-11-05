@@ -72,6 +72,7 @@ public class Conta {
         //pessoa física rende 1% poupança e 1,5% conta investimento
         //pessoa jurídica rende 3,5% conta investimento
 
+        BigDecimal saldo = getSaldoConta();
         //Consultar a conta ok
         //verificar o tipo OK
         //verificar o tipo cliente
@@ -102,7 +103,8 @@ public class Conta {
         }
         //aplicar rendimento de acordo tipo conta e tipo cliente
         //atualizar saldo
-        setSaldoConta(valorDeposito);
+        saldo = saldo.add(valorDeposito).setScale(2, RoundingMode.HALF_EVEN);
+        setSaldoConta(saldo);
 
         imprimirSaldo();
 
@@ -111,19 +113,22 @@ public class Conta {
     public void efetuarSaque(Integer idConta, BigDecimal valorSaque, String TipoCliente){
         //pessoa juridica paga 0,5%
         BigDecimal saldo = getSaldoConta();
-        if (TipoCliente.equals("PF")) {
-            saldo = saldo.subtract(valorSaque).setScale(2, RoundingMode.HALF_EVEN);
-            setSaldoConta(saldo);
-            }
-        else if (TipoCliente.equals("PJ"))
-        {
-            BigDecimal saque = valorSaque.multiply(VALOR_TAXA_SAQUE_PJ).add(valorSaque);
-            saldo = saldo.subtract(saque).setScale(2, RoundingMode.HALF_EVEN);
-            setSaldoConta(saldo);
+        if (saldo.compareTo(valorSaque)==-1){
+            System.out.println("\nSaque NÃO realizado! Não há saldo suficiente");
+            imprimirSaldo();
         }
-        System.out.println("Saque realizado com SUCESSO!");
-        imprimirSaldo();
-
+        else {
+            if (TipoCliente.equals("PF")) {
+                saldo = saldo.subtract(valorSaque).setScale(2, RoundingMode.HALF_EVEN);
+                setSaldoConta(saldo);
+            } else if (TipoCliente.equals("PJ")) {
+                BigDecimal saque = valorSaque.multiply(VALOR_TAXA_SAQUE_PJ).add(valorSaque);
+                saldo = saldo.subtract(saque).setScale(2, RoundingMode.HALF_EVEN);
+                setSaldoConta(saldo);
+            }
+            System.out.println("\nSaque realizado com SUCESSO!");
+            imprimirSaldo();
+        }
     }
 
     //TODO: Andreia
