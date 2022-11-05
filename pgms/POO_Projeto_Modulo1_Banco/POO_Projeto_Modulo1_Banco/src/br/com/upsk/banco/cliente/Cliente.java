@@ -3,7 +3,6 @@ package br.com.upsk.banco.cliente;
 import br.com.upsk.banco.conta.Conta;
 
 import java.math.BigDecimal;
-import java.security.PrivateKey;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -58,14 +57,14 @@ public class Cliente {
         return intIDConta;
     }
     public void efetuarDeposito(Integer idConta, BigDecimal valorDeposito){
-        conta.efetuarDepósito(idConta,valorDeposito,this.conta.getTipo());
+        conta.efetuarDeposito(idConta,valorDeposito,this.conta.getTipo());
     }
 
     public void efetuarSaque(Integer idConta, BigDecimal valorSaque){
-        System.out.println("Passou no efetuar saque Classe Cliente");
-        System.out.println("idConta: " + idConta);
-        System.out.println("valorSaque: " + valorSaque);
-        System.out.println("TipoConta: " + this.conta.getTipo());
+
+        //System.out.println("idConta: " + idConta);
+        //System.out.println("valorSaque: " + valorSaque);
+        //System.out.println("TipoConta: " + this.conta.getTipo());
         conta.efetuarSaque(idConta,valorSaque,this.tipoCliente);
     }
 

@@ -68,8 +68,7 @@ public class Conta {
         System.out.println("---------------------------------------------------------------");
     }
 
-    //TODO: Neri
-    public void efetuarDepósito(Integer idConta, BigDecimal valorDeposito, String TipoConta){
+    public void efetuarDeposito(Integer idConta, BigDecimal valorDeposito, String TipoConta){
         //pessoa física rende 1% poupança e 1,5% conta investimento
         //pessoa jurídica rende 3,5% conta investimento
 
@@ -77,23 +76,46 @@ public class Conta {
         //verificar o tipo OK
         //verificar o tipo cliente
 
+        if (getTipo().equals("PF")){
+            switch (TipoConta){
+                case "CI":
+                    valorDeposito.multiply(VALOR_RENDIMENTO_DEPOSITO_PF).add(valorDeposito);
+                    break;
+                case  "CP":
+                    valorDeposito.multiply(VALOR_RENDIMENTO_POUPANCA_PF).add(valorDeposito);
+                    break;
+                default:
+                    valorDeposito.multiply(BigDecimal.ZERO).add(valorDeposito);
+            }
+        }
+        else{
+            switch (TipoConta){
+                case "CI":
+                    valorDeposito.multiply(VALOR_RENDIMENTO_DEPOSITO_PJ).add(valorDeposito);
+                    break;
+                case  "CP":
+                    System.out.println("Pessoa juridica não pode operar CP");
+                    break;
+                default:
+                    valorDeposito.multiply(BigDecimal.ZERO).add(valorDeposito);
+            }
+        }
         //aplicar rendimento de acordo tipo conta e tipo cliente
         //atualizar saldo
         setSaldoConta(valorDeposito);
 
-
+        imprimirSaldo();
 
     }
 
-    //TODO: Bruna
     public void efetuarSaque(Integer idConta, BigDecimal valorSaque, String TipoCliente){
         //pessoa juridica paga 0,5%
         BigDecimal saldo = getSaldoConta();
-        if (TipoCliente == "PF") {
+        if (TipoCliente.equals("PF")) {
             saldo = saldo.subtract(valorSaque).setScale(2, RoundingMode.HALF_EVEN);
             setSaldoConta(saldo);
             }
-        else if (TipoCliente == "PJ")
+        else if (TipoCliente.equals("PJ"))
         {
             BigDecimal saque = valorSaque.multiply(VALOR_TAXA_SAQUE_PJ).add(valorSaque);
             saldo = saldo.subtract(saque).setScale(2, RoundingMode.HALF_EVEN);
@@ -105,8 +127,9 @@ public class Conta {
     }
 
     //TODO: Andreia
-    public void EfetuarTransferencia(BigDecimal valorTransferencia, String idContaOrigem, String idContaDestino){
+    public void EfetuarTransferencia(BigDecimal valorTransferencia, Integer idContaOrigem, Integer idContaDestino, String tipoCliente){
         //pessoa juridica paga 0,5% para transferir outra titularidade
+
 
     }
 
