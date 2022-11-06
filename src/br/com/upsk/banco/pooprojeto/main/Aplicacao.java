@@ -5,7 +5,6 @@ import br.com.upsk.banco.pooprojeto.cliente.ClientePJ;
 import br.com.upsk.banco.pooprojeto.cliente.TipoContas;
 import br.com.upsk.banco.pooprojeto.cliente.TipoDocumentos;
 import br.com.upsk.banco.pooprojeto.conta.Conta;
-import br.com.upsk.banco.pooprojeto.conta.ContaCorrente;
 
 import java.math.BigDecimal;
 import java.util.Scanner;
@@ -23,44 +22,21 @@ public class Aplicacao {
         Aplicacao.interagirMenu();
     }
 
-    private static void interagirMenu(){
-        String resposta;
-        resposta = Aplicacao.inicializarMenu();
-
-        switch (resposta.toUpperCase()){
-            case "1" -> Aplicacao.selecionarOpcaoMenu_1();
-            case "2" -> Aplicacao.selecionarOpcaoMenu_2(cliente);
-            case "3" -> Aplicacao.selecionarOpcaoMenu_3(cliente);
-            case "4" -> Aplicacao.selecionarOpcaoMenu_4(cliente);
-            case "5" -> Aplicacao.selecionarOpcaoMenu_5(cliente);
-            case "6" -> Aplicacao.selecionarOpcaoMenu_6(cliente);
-            case "X" -> System.out.println(Aplicacao.ATE_LOGO_MENSAGEM_PADRAO);
-        }
-    }
-
     private static String inicializarMenu(){
         String resposta;
         StringBuilder sb = new StringBuilder();
 
-        if (Aplicacao.cliente != null) {
-            sb.append("OLÁ! ").append("\n");
-            sb.append("---------------------------------------------------------------------\n");
-            sb.append("1- Abrir Conta").append("\n");
-            sb.append("2- Depositar").append("\n");
-            sb.append("3- Sacar").append("\n");
-            sb.append("4- Transferir").append("\n");
-            sb.append("5- Investir").append("\n");
-            sb.append("6- Consultar Saldo das Contas").append("\n");
-            sb.append("x- para sair").append("\n");
-            sb.append("---------------------------------------------------------------------\n");
-            sb.append("--> Indique o número de uma opção acima e de enter: ");
-        }else{
-            sb.append("OLÁ! ").append("\n");
-            sb.append("---------------------------------------------------------------------\n");
-            sb.append("1- Abrir Conta").append("\n");
-            sb.append("---------------------------------------------------------------------\n");
-            sb.append("--> Indique o número de uma opção acima e de enter: ");
-        }
+        sb.append("OLÁ! ").append("\n");
+        sb.append("---------------------------------------------------------------------\n");
+        sb.append("1- Abrir Conta").append("\n");
+        sb.append("2- Depositar").append("\n");
+        sb.append("3- Sacar").append("\n");
+        sb.append("4- Transferir").append("\n");
+        sb.append("5- Investir").append("\n");
+        sb.append("6- Consultar Saldo das Contas").append("\n");
+        sb.append("x- para sair").append("\n");
+        sb.append("---------------------------------------------------------------------\n");
+        sb.append("--> Indique o número de uma opção acima e de enter: ");
 
         Scanner leitorTela = new Scanner(System.in);
         System.out.printf(sb.toString());
@@ -77,6 +53,21 @@ public class Aplicacao {
         resposta = leitorTela.next();
 
         return resposta.toUpperCase();
+    }
+
+    private static void interagirMenu(){
+        String resposta;
+        resposta = Aplicacao.inicializarMenu();
+
+        switch (resposta.toUpperCase()){
+            case "1" -> Aplicacao.selecionarOpcaoMenu_1();
+            case "2" -> Aplicacao.selecionarOpcaoMenu_2(cliente);
+            case "3" -> Aplicacao.selecionarOpcaoMenu_3(cliente);
+            case "4" -> Aplicacao.selecionarOpcaoMenu_4(cliente);
+            case "5" -> Aplicacao.selecionarOpcaoMenu_5(cliente);
+            case "6" -> Aplicacao.selecionarOpcaoMenu_6(cliente);
+            case "X" -> System.out.println(Aplicacao.ATE_LOGO_MENSAGEM_PADRAO);
+        }
     }
 
     private static void  selecionarOpcaoMenu_1(){
@@ -319,24 +310,26 @@ public class Aplicacao {
         System.out.printf("Informe o numero de identificação da conta investimento ou poupança  : ID ");
         idContaDestino = leitorTela.nextInt();
 
+        System.out.printf("Informe o valor do investimento (ex 1100,50)  : R$ ");
+        dblValorInvestimento = leitorTela.nextDouble();
+        BigDecimal valorInvestimento = new BigDecimal(dblValorInvestimento);
 
-        if (cliente.getContasCliente().get(idConta) instanceof ContaCorrente){
-            System.out.println("Não é possível fazer investimento na CC. Favor informar uma conta Poupança ou de Investimento");
-        } else {
-            System.out.printf("Informe o valor do investimento (ex 1100,50)  : R$ ");
-            dblValorInvestimento = leitorTela.nextDouble();
-            BigDecimal valorInvestimento = new BigDecimal(dblValorInvestimento);
+        String saldoAnteriorOrigem = cliente.getContasCliente().get(idContaOrigem).consultarSaldoFormatadoEmMoedaLocal();
+        cliente.getContasCliente().get(idContaOrigem).sacar(cliente, valorInvestimento);
+        String saldoAtualOrigem = cliente.getContasCliente().get(idContaOrigem).consultarSaldoFormatadoEmMoedaLocal();
 
-            String saldoAnterior = cliente.getContasCliente().get(idConta).consultarSaldoFormatadoEmMoedaLocal();
-            cliente.getContasCliente().get(idConta).investir(cliente, valorInvestimento);
-            String saldoAtual = cliente.getContasCliente().get(idConta).consultarSaldoFormatadoEmMoedaLocal();
+        String saldoAnteriorDestino = cliente.getContasCliente().get(idContaDestino).consultarSaldoFormatadoEmMoedaLocal();
+        cliente.getContasCliente().get(idContaDestino).investir(cliente, valorInvestimento);
+        String saldoAtualDestino = cliente.getContasCliente().get(idContaDestino).consultarSaldoFormatadoEmMoedaLocal();
 
-            System.out.println("\n---- Investimento realizado com sucesso na conta " + idConta + "! ----");
-            System.out.println("SALDO ANTERIOR: " + saldoAnterior);
-            System.out.println("SALDO ATUAL   : " + saldoAtual);
-            System.out.println("\n");
-        }
-
+        //atualizado
+        System.out.println("\n---- Investimento realizado com sucesso na conta " + idContaDestino + "! ----");
+        System.out.println("SALDO ANTERIOR: " + saldoAnteriorDestino);
+        System.out.println("SALDO ATUAL   : " + saldoAtualDestino);
+        System.out.println("\n------------------- Sua conta corrente:  " + idContaOrigem + "! -------------");
+        System.out.println("SALDO ANTERIOR: " + saldoAnteriorOrigem);
+        System.out.println("SALDO ATUAL   : " + saldoAtualOrigem);
+        System.out.println("\n");
     }
 
     public static void transferir(Cliente cliente) throws Exception{
