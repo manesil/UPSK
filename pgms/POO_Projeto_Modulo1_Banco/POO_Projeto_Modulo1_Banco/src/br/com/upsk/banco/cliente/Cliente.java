@@ -49,13 +49,14 @@ public class Cliente {
         this.nomeCliente = nomeCliente;
     }
 
-    public Integer abrirConta(String tipo){
+    public Conta abrirConta(String tipo){
         Random idConta = new Random();
         Integer intIDConta = idConta.nextInt(1000);
         conta = new Conta(intIDConta,tipo);
         contas.add(intIDConta);
-        return intIDConta;
+        return conta;
     }
+
     public void efetuarDeposito(Integer idConta, BigDecimal valorDeposito){
         conta.efetuarDeposito(idConta,valorDeposito,this.conta.getTipo());
     }
@@ -66,6 +67,7 @@ public class Cliente {
         //System.out.println("valorSaque: " + valorSaque);
         //System.out.println("TipoConta: " + this.conta.getTipo());
         conta.efetuarSaque(idConta,valorSaque,this.tipoCliente);
+
     }
 
 

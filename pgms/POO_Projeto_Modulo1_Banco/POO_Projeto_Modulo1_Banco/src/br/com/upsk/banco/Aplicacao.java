@@ -9,11 +9,13 @@ public class Aplicacao {
 
     public static void main(String[] args) {
         Cliente nossoCliente =new Cliente();
+
         Integer idConta=0;
         //BigDecimal vlrTransacao = BigDecimal.ZERO;
 
         boolean continuar=true;
         while (continuar) {
+
 
             switch (capturaMenuEscolhido()) {
                 case 1: //Abrir conta
@@ -72,6 +74,7 @@ public class Aplicacao {
             System.out.println("Abra uma conta antes de solicitar um saque");
         }
     }
+
 
     private static void solicitarDeposito(Cliente nossoCliente, Integer idConta) {
         BigDecimal vlrTransacao;
@@ -133,6 +136,7 @@ public class Aplicacao {
 
         return idConta;
     }
+
 
     private static Integer capturaMenuEscolhido(){
         Scanner capturaTela = new Scanner(System.in);

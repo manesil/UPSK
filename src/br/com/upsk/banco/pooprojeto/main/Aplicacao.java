@@ -16,7 +16,10 @@ public class Aplicacao {
     private static final String ERRO_MENSAGEM_PADRAO = "Algo não funcionou bem :( ... Desculpe! Execute novamente a Aplicação";
     private static final String ATE_LOGO_MENSAGEM_PADRAO = "ATÉ LOGO!!!";
 
+    private static final String ERRO_MENSAGEM_CONTA = "Conta inexistente! Abra a conta primeiro.";
+
     public static void main(String[] args){
+
         Aplicacao.interagirMenu();
     }
 
@@ -88,7 +91,7 @@ public class Aplicacao {
             if ("N".equals(resposta)){
                 System.out.println(Aplicacao.ATE_LOGO_MENSAGEM_PADRAO);
             }
-            interagirMenu();
+            else interagirMenu();
 
         }catch (Exception e){
             Aplicacao.executarSaidaAplicacao(Aplicacao.ERRO_MENSAGEM_PADRAO);
@@ -98,23 +101,30 @@ public class Aplicacao {
 
     private static void selecionarOpcaoMenu_2(Cliente cliente){
         String resposta;
-        try {
-            Aplicacao.depositar(cliente);
-            resposta = Aplicacao.verificarSeDesejaContinuar();
-
-            if ("N".equals(resposta)){
-                Aplicacao.executarSaidaAplicacao(Aplicacao.ATE_LOGO_MENSAGEM_PADRAO);
-            }
-            interagirMenu();
-
-        }catch (Exception e){
-            Aplicacao.executarSaidaAplicacao(Aplicacao.ERRO_MENSAGEM_PADRAO);
+        if (cliente == null) {
+            System.out.println(ERRO_MENSAGEM_CONTA);
+            Aplicacao.selecionarOpcaoMenu_1();
         }
+            try {
+                Aplicacao.depositar(cliente);
+                resposta = Aplicacao.verificarSeDesejaContinuar();
+
+                if ("N".equals(resposta)) {
+                    Aplicacao.executarSaidaAplicacao(Aplicacao.ATE_LOGO_MENSAGEM_PADRAO);
+                } else interagirMenu();
+
+            } catch (Exception e) {
+                Aplicacao.executarSaidaAplicacao(Aplicacao.ERRO_MENSAGEM_PADRAO);
+            }
+
     }
 
     private static void selecionarOpcaoMenu_3(Cliente cliente){
         String resposta;
-
+        if (cliente == null) {
+            System.out.println(ERRO_MENSAGEM_CONTA);
+            Aplicacao.selecionarOpcaoMenu_1();
+        }
         try {
             Aplicacao.sacar(cliente);
             resposta = Aplicacao.verificarSeDesejaContinuar();
@@ -122,7 +132,7 @@ public class Aplicacao {
             if ("N".equals(resposta)){
                 Aplicacao.executarSaidaAplicacao(Aplicacao.ATE_LOGO_MENSAGEM_PADRAO);
             }
-            interagirMenu();
+            else interagirMenu();
 
         }catch (Exception e){
             Aplicacao.executarSaidaAplicacao(Aplicacao.ERRO_MENSAGEM_PADRAO);
@@ -132,6 +142,11 @@ public class Aplicacao {
     private static void selecionarOpcaoMenu_4(Cliente cliente){
         String resposta;
 
+        if (cliente == null) {
+            System.out.println(ERRO_MENSAGEM_CONTA);
+            Aplicacao.selecionarOpcaoMenu_1();
+        }
+
         try {
             Aplicacao.transferir(cliente);
             resposta = Aplicacao.verificarSeDesejaContinuar();
@@ -139,7 +154,7 @@ public class Aplicacao {
             if ("N".equals(resposta)){
                 Aplicacao.executarSaidaAplicacao(Aplicacao.ATE_LOGO_MENSAGEM_PADRAO);
             }
-            interagirMenu();
+            else interagirMenu();
 
         }catch (Exception e){
             Aplicacao.executarSaidaAplicacao(Aplicacao.ERRO_MENSAGEM_PADRAO);
@@ -149,6 +164,11 @@ public class Aplicacao {
     private static void selecionarOpcaoMenu_5(Cliente cliente){
         String resposta;
 
+        if (cliente == null) {
+            System.out.println(ERRO_MENSAGEM_CONTA);
+            Aplicacao.selecionarOpcaoMenu_1();
+        }
+
         try {
             Aplicacao.investir(cliente);
             resposta = Aplicacao.verificarSeDesejaContinuar();
@@ -156,7 +176,7 @@ public class Aplicacao {
             if ("N".equals(resposta)){
                 Aplicacao.executarSaidaAplicacao(Aplicacao.ATE_LOGO_MENSAGEM_PADRAO);
             }
-            interagirMenu();
+            else interagirMenu();
 
         }catch (Exception e){
             Aplicacao.executarSaidaAplicacao(Aplicacao.ERRO_MENSAGEM_PADRAO);
@@ -166,6 +186,11 @@ public class Aplicacao {
     private static void selecionarOpcaoMenu_6(Cliente cliente){
         String resposta;
 
+        if (cliente == null) {
+            System.out.println(ERRO_MENSAGEM_CONTA);
+            Aplicacao.selecionarOpcaoMenu_1();
+        }
+
         try {
             Aplicacao.imprimirSaldos(cliente);
             resposta = Aplicacao.verificarSeDesejaContinuar();
@@ -173,7 +198,7 @@ public class Aplicacao {
             if ("N".equals(resposta)){
                 Aplicacao.executarSaidaAplicacao(Aplicacao.ATE_LOGO_MENSAGEM_PADRAO);
             }
-            interagirMenu();
+            else interagirMenu();
 
         }catch (Exception e){
             Aplicacao.executarSaidaAplicacao(Aplicacao.ERRO_MENSAGEM_PADRAO);
@@ -283,12 +308,17 @@ public class Aplicacao {
     }
 
     public static void investir(Cliente cliente) throws Exception{
-        int idConta;
+        int idContaOrigem;
+        int idContaDestino;
         double dblValorInvestimento;
 
         Scanner leitorTela = new Scanner(System.in);
-        System.out.printf("Informe o numero de identificação da conta    : ID ");
-        idConta = leitorTela.nextInt();
+        System.out.printf("Informe o numero de identificação da conta origem  : ID ");
+        idContaOrigem = leitorTela.nextInt();
+
+        System.out.printf("Informe o numero de identificação da conta investimento ou poupança  : ID ");
+        idContaDestino = leitorTela.nextInt();
+
 
         if (cliente.getContasCliente().get(idConta) instanceof ContaCorrente){
             System.out.println("Não é possível fazer investimento na CC. Favor informar uma conta Poupança ou de Investimento");
@@ -306,6 +336,7 @@ public class Aplicacao {
             System.out.println("SALDO ATUAL   : " + saldoAtual);
             System.out.println("\n");
         }
+
     }
 
     public static void transferir(Cliente cliente) throws Exception{
