@@ -3,7 +3,6 @@ package br.com.upsk.banco.cliente;
 import br.com.upsk.banco.conta.Conta;
 
 import java.math.BigDecimal;
-import java.security.PrivateKey;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -57,8 +56,18 @@ public class Cliente {
         contas.add(intIDConta);
         return conta;
     }
-    public void efetuarDeposito(Conta conta, BigDecimal valorDeposito){
-        conta.efetuarDepósito(conta.getIdConta(),valorDeposito,this.conta.getTipo());
+
+    public void efetuarDeposito(Integer idConta, BigDecimal valorDeposito){
+        conta.efetuarDeposito(idConta,valorDeposito,this.conta.getTipo());
+    }
+
+    public void efetuarSaque(Integer idConta, BigDecimal valorSaque){
+
+        //System.out.println("idConta: " + idConta);
+        //System.out.println("valorSaque: " + valorSaque);
+        //System.out.println("TipoConta: " + this.conta.getTipo());
+        conta.efetuarSaque(idConta,valorSaque,this.tipoCliente);
+
     }
 
 

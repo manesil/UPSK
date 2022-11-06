@@ -3,8 +3,9 @@ package br.com.upsk.banco.conta;
 import br.com.upsk.banco.cliente.Cliente;
 
 import java.math.BigDecimal;
-import java.util.Objects;
-import java.util.function.BiFunction;
+
+import java.math.RoundingMode;
+
 
 public class Conta {
 
@@ -13,6 +14,7 @@ public class Conta {
     private final static BigDecimal VALOR_RENDIMENTO_POUPANCA_PF = new BigDecimal(0.01);
     private final static BigDecimal VALOR_RENDIMENTO_DEPOSITO_PF = new BigDecimal(0.015);
     private final static BigDecimal VALOR_RENDIMENTO_DEPOSITO_PJ = new BigDecimal(0.035);
+    private final static BigDecimal VALOR_TAXA_SAQUE_PJ = new BigDecimal(0.005);
 
     //Atributos (apenas na classe)
     private Integer idConta;
@@ -62,32 +64,83 @@ public class Conta {
         this.saldoConta = saldoConta;
     }
 
-    //TODO: Neri
-    public void efetuarDepósito(Integer idConta, BigDecimal valorDeposito, String TipoConta){
+    private void imprimirSaldo () {
+        System.out.println("---------------------------------------------------------------");
+        System.out.println("SALDO ATUALIZADO: R$ " + getSaldoConta());
+        System.out.println("---------------------------------------------------------------");
+    }
+
+    public void efetuarDeposito(Integer idConta, BigDecimal valorDeposito, String TipoConta){
         //pessoa física rende 1% poupança e 1,5% conta investimento
         //pessoa jurídica rende 3,5% conta investimento
 
+        BigDecimal saldo = getSaldoConta();
         //Consultar a conta ok
         //verificar o tipo OK
         //verificar o tipo cliente
 
+        if (getTipo().equals("PF")){
+            switch (TipoConta){
+                case "CI":
+                    valorDeposito.multiply(VALOR_RENDIMENTO_DEPOSITO_PF).add(valorDeposito);
+                    break;
+                case  "CP":
+                    valorDeposito.multiply(VALOR_RENDIMENTO_POUPANCA_PF).add(valorDeposito);
+                    break;
+                default:
+                    valorDeposito.multiply(BigDecimal.ZERO).add(valorDeposito);
+            }
+        }
+        else{
+            switch (TipoConta){
+                case "CI":
+                    valorDeposito.multiply(VALOR_RENDIMENTO_DEPOSITO_PJ).add(valorDeposito);
+                    break;
+                case  "CP":
+                    System.out.println("Pessoa juridica não pode operar CP");
+                    break;
+                default:
+                    valorDeposito.multiply(BigDecimal.ZERO).add(valorDeposito);
+            }
+        }
         //aplicar rendimento de acordo tipo conta e tipo cliente
         //atualizar saldo
+        saldo = saldo.add(valorDeposito).setScale(2, RoundingMode.HALF_EVEN);
+        setSaldoConta(saldo);
 
-
-
+        imprimirSaldo();
 
     }
 
-    //TODO: Bruna
-    public void efetuarSaque(BigDecimal valorSaque, Integer idConta){
-        //pessoa juridica paga 0,5%
 
+    public void efetuarSaque(Integer idConta, BigDecimal valorSaque, String TipoCliente){
+
+        //pessoa juridica paga 0,5%
+        BigDecimal saldo = getSaldoConta();
+        if (saldo.compareTo(valorSaque)==-1){
+            System.out.println("\nSaque NÃO realizado! Não há saldo suficiente");
+            imprimirSaldo();
+        }
+        else {
+            if (TipoCliente.equals("PF")) {
+                saldo = saldo.subtract(valorSaque).setScale(2, RoundingMode.HALF_EVEN);
+                setSaldoConta(saldo);
+            } else if (TipoCliente.equals("PJ")) {
+                BigDecimal saque = valorSaque.multiply(VALOR_TAXA_SAQUE_PJ).add(valorSaque);
+                saldo = saldo.subtract(saque).setScale(2, RoundingMode.HALF_EVEN);
+                setSaldoConta(saldo);
+            }
+            System.out.println("\nSaque realizado com SUCESSO!");
+            imprimirSaldo();
+        }
     }
 
     //TODO: Andreia
-    public void efetuarTransferencia(BigDecimal valorTransferencia, Integer idContaOrigem, Integer idContaDestino){
+
+    public void EfetuarTransferencia(BigDecimal valorTransferencia, Integer idContaOrigem, Integer idContaDestino, String tipoCliente){
+
         //pessoa juridica paga 0,5% para transferir outra titularidade
+
 
     }
 
