@@ -341,7 +341,7 @@ public class Aplicacao {
         String saldoAnteriorOrigem = cliente.getContasCliente().get(idContaOrigem).consultarSaldoFormatadoEmMoedaLocal();
         if (verificaSaldoDisponivel(idContaOrigem,valorInvestimento)){
 
-            cliente.getContasCliente().get(idContaOrigem).sacar(cliente, valorInvestimento);
+            cliente.getContasCliente().get(idContaOrigem).sacarSemTaxa(cliente, valorInvestimento);
             String saldoAtualOrigem = cliente.getContasCliente().get(idContaOrigem).consultarSaldoFormatadoEmMoedaLocal();
 
             String saldoAnteriorDestino = cliente.getContasCliente().get(idContaDestino).consultarSaldoFormatadoEmMoedaLocal();
@@ -379,7 +379,7 @@ public class Aplicacao {
         String saldoAnteriorOrigem = cliente.getContasCliente().get(idContaOrigem).consultarSaldoFormatadoEmMoedaLocal();
 
         if (verificaSaldoDisponivel(idContaOrigem,valorResgate)){
-            cliente.getContasCliente().get(idContaOrigem).sacar(cliente, valorResgate);
+            cliente.getContasCliente().get(idContaOrigem).sacarSemTaxa(cliente, valorResgate);
 
             String saldoAtualOrigem = cliente.getContasCliente().get(idContaOrigem).consultarSaldoFormatadoEmMoedaLocal();
 

@@ -85,7 +85,17 @@ public abstract class Conta {
 
         this.atualizarSaldo(new BigDecimal(novoSaldo));
     }
+    public void sacarSemTaxa(Cliente cliente, BigDecimal valorSaque)  throws Exception{
+        if (   this.consultarSaldo().doubleValue() <= 0
+                || this.consultarSaldo().doubleValue() < valorSaque.doubleValue() ){
+            throw new Exception("INFO: Nao ha saldo suficiente na " + TipoContas.CONTA_POUPANCA);
+        }
 
+        double novoSaldo = this.consultarSaldo().doubleValue();
+        novoSaldo -= valorSaque.doubleValue();
+
+        this.atualizarSaldo(new BigDecimal(novoSaldo));
+    }
     public void transferir(Cliente cliente, BigDecimal valorTransferencia)  throws Exception{
         if (   this.consultarSaldo().doubleValue() <= 0
                 || this.consultarSaldo().doubleValue() < valorTransferencia.doubleValue() ){
