@@ -30,7 +30,8 @@ public class ContaPoupanca extends Conta{
         if ( valorInvestimento != null && valorInvestimento.doubleValue() <= 0 ){
             throw new Exception("INFO: Valor invalido para investimento na " + TipoContas.CONTA_POUPANCA );
         }
-        double novoSaldo = this.consultarSaldo().doubleValue() + valorInvestimento.doubleValue();
+        double rendimento = pegarRendimento(cliente);
+        double novoSaldo = this.consultarSaldo().doubleValue() +valorInvestimento.doubleValue()+ (valorInvestimento.doubleValue() * rendimento);
         this.atualizarSaldo(new BigDecimal(novoSaldo));
     }
 

@@ -15,7 +15,10 @@ public class Aplicacao {
     private static final String ERRO_MENSAGEM_PADRAO = "Algo não funcionou bem :( ... Desculpe! Execute novamente a Aplicação";
     private static final String ATE_LOGO_MENSAGEM_PADRAO = "ATÉ LOGO!!!";
 
+    private static final String ERRO_MENSAGEM_CONTA = "Conta inexistente! Abra a conta primeiro.";
+
     public static void main(String[] args){
+
         Aplicacao.interagirMenu();
     }
 
@@ -79,7 +82,7 @@ public class Aplicacao {
             if ("N".equals(resposta)){
                 System.out.println(Aplicacao.ATE_LOGO_MENSAGEM_PADRAO);
             }
-            interagirMenu();
+            else interagirMenu();
 
         }catch (Exception e){
             Aplicacao.executarSaidaAplicacao(Aplicacao.ERRO_MENSAGEM_PADRAO);
@@ -89,23 +92,30 @@ public class Aplicacao {
 
     private static void selecionarOpcaoMenu_2(Cliente cliente){
         String resposta;
-        try {
-            Aplicacao.depositar(cliente);
-            resposta = Aplicacao.verificarSeDesejaContinuar();
-
-            if ("N".equals(resposta)){
-                Aplicacao.executarSaidaAplicacao(Aplicacao.ATE_LOGO_MENSAGEM_PADRAO);
-            }
-            interagirMenu();
-
-        }catch (Exception e){
-            Aplicacao.executarSaidaAplicacao(Aplicacao.ERRO_MENSAGEM_PADRAO);
+        if (cliente == null) {
+            System.out.println(ERRO_MENSAGEM_CONTA);
+            Aplicacao.selecionarOpcaoMenu_1();
         }
+            try {
+                Aplicacao.depositar(cliente);
+                resposta = Aplicacao.verificarSeDesejaContinuar();
+
+                if ("N".equals(resposta)) {
+                    Aplicacao.executarSaidaAplicacao(Aplicacao.ATE_LOGO_MENSAGEM_PADRAO);
+                } else interagirMenu();
+
+            } catch (Exception e) {
+                Aplicacao.executarSaidaAplicacao(Aplicacao.ERRO_MENSAGEM_PADRAO);
+            }
+
     }
 
     private static void selecionarOpcaoMenu_3(Cliente cliente){
         String resposta;
-
+        if (cliente == null) {
+            System.out.println(ERRO_MENSAGEM_CONTA);
+            Aplicacao.selecionarOpcaoMenu_1();
+        }
         try {
             Aplicacao.sacar(cliente);
             resposta = Aplicacao.verificarSeDesejaContinuar();
@@ -113,7 +123,7 @@ public class Aplicacao {
             if ("N".equals(resposta)){
                 Aplicacao.executarSaidaAplicacao(Aplicacao.ATE_LOGO_MENSAGEM_PADRAO);
             }
-            interagirMenu();
+            else interagirMenu();
 
         }catch (Exception e){
             Aplicacao.executarSaidaAplicacao(Aplicacao.ERRO_MENSAGEM_PADRAO);
@@ -123,6 +133,11 @@ public class Aplicacao {
     private static void selecionarOpcaoMenu_4(Cliente cliente){
         String resposta;
 
+        if (cliente == null) {
+            System.out.println(ERRO_MENSAGEM_CONTA);
+            Aplicacao.selecionarOpcaoMenu_1();
+        }
+
         try {
             Aplicacao.transferir(cliente);
             resposta = Aplicacao.verificarSeDesejaContinuar();
@@ -130,7 +145,7 @@ public class Aplicacao {
             if ("N".equals(resposta)){
                 Aplicacao.executarSaidaAplicacao(Aplicacao.ATE_LOGO_MENSAGEM_PADRAO);
             }
-            interagirMenu();
+            else interagirMenu();
 
         }catch (Exception e){
             Aplicacao.executarSaidaAplicacao(Aplicacao.ERRO_MENSAGEM_PADRAO);
@@ -140,6 +155,11 @@ public class Aplicacao {
     private static void selecionarOpcaoMenu_5(Cliente cliente){
         String resposta;
 
+        if (cliente == null) {
+            System.out.println(ERRO_MENSAGEM_CONTA);
+            Aplicacao.selecionarOpcaoMenu_1();
+        }
+
         try {
             Aplicacao.investir(cliente);
             resposta = Aplicacao.verificarSeDesejaContinuar();
@@ -147,7 +167,7 @@ public class Aplicacao {
             if ("N".equals(resposta)){
                 Aplicacao.executarSaidaAplicacao(Aplicacao.ATE_LOGO_MENSAGEM_PADRAO);
             }
-            interagirMenu();
+            else interagirMenu();
 
         }catch (Exception e){
             Aplicacao.executarSaidaAplicacao(Aplicacao.ERRO_MENSAGEM_PADRAO);
@@ -157,6 +177,11 @@ public class Aplicacao {
     private static void selecionarOpcaoMenu_6(Cliente cliente){
         String resposta;
 
+        if (cliente == null) {
+            System.out.println(ERRO_MENSAGEM_CONTA);
+            Aplicacao.selecionarOpcaoMenu_1();
+        }
+
         try {
             Aplicacao.imprimirSaldos(cliente);
             resposta = Aplicacao.verificarSeDesejaContinuar();
@@ -164,7 +189,7 @@ public class Aplicacao {
             if ("N".equals(resposta)){
                 Aplicacao.executarSaidaAplicacao(Aplicacao.ATE_LOGO_MENSAGEM_PADRAO);
             }
-            interagirMenu();
+            else interagirMenu();
 
         }catch (Exception e){
             Aplicacao.executarSaidaAplicacao(Aplicacao.ERRO_MENSAGEM_PADRAO);
@@ -274,24 +299,35 @@ public class Aplicacao {
     }
 
     public static void investir(Cliente cliente) throws Exception{
-        int idConta;
+        int idContaOrigem;
+        int idContaDestino;
         double dblValorInvestimento;
 
         Scanner leitorTela = new Scanner(System.in);
-        System.out.printf("Informe o numero de identificação da conta    : ID ");
-        idConta = leitorTela.nextInt();
+        System.out.printf("Informe o numero de identificação da conta origem  : ID ");
+        idContaOrigem = leitorTela.nextInt();
+
+        System.out.printf("Informe o numero de identificação da conta investimento ou poupança  : ID ");
+        idContaDestino = leitorTela.nextInt();
 
         System.out.printf("Informe o valor do investimento (ex 1100,50)  : R$ ");
         dblValorInvestimento = leitorTela.nextDouble();
         BigDecimal valorInvestimento = new BigDecimal(dblValorInvestimento);
 
-        String saldoAnterior = cliente.getContasCliente().get(idConta).consultarSaldoFormatadoEmMoedaLocal();
-        cliente.getContasCliente().get(idConta).investir(cliente, valorInvestimento);
-        String saldoAtual = cliente.getContasCliente().get(idConta).consultarSaldoFormatadoEmMoedaLocal();
+        String saldoAnteriorOrigem = cliente.getContasCliente().get(idContaOrigem).consultarSaldoFormatadoEmMoedaLocal();
+        cliente.getContasCliente().get(idContaOrigem).sacar(cliente, valorInvestimento);
+        String saldoAtualOrigem = cliente.getContasCliente().get(idContaOrigem).consultarSaldoFormatadoEmMoedaLocal();
 
-        System.out.println("\n---- Investimento realizado com sucesso na conta " + idConta + "! ----");
-        System.out.println("SALDO ANTERIOR: " + saldoAnterior);
-        System.out.println("SALDO ATUAL   : " + saldoAtual);
+        String saldoAnteriorDestino = cliente.getContasCliente().get(idContaDestino).consultarSaldoFormatadoEmMoedaLocal();
+        cliente.getContasCliente().get(idContaDestino).investir(cliente, valorInvestimento);
+        String saldoAtualDestino = cliente.getContasCliente().get(idContaDestino).consultarSaldoFormatadoEmMoedaLocal();
+
+        System.out.println("\n---- Investimento realizado com sucesso na conta " + idContaDestino + "! ----");
+        System.out.println("SALDO ANTERIOR: " + saldoAnteriorDestino);
+        System.out.println("SALDO ATUAL   : " + saldoAtualDestino);
+        System.out.println("\n------------------- Sua conta corrente:  " + idContaOrigem + "! -------------");
+        System.out.println("SALDO ANTERIOR: " + saldoAnteriorOrigem);
+        System.out.println("SALDO ATUAL   : " + saldoAtualOrigem);
         System.out.println("\n");
     }
 
