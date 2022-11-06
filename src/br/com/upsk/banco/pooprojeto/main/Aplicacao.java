@@ -15,6 +15,7 @@ public class Aplicacao {
     private static final String ERRO_MENSAGEM_PADRAO = "Algo não funcionou bem :( ... Desculpe! Execute novamente a Aplicação";
     private static final String ATE_LOGO_MENSAGEM_PADRAO = "ATÉ LOGO!!!";
 
+        private static final String ERRO_SALDO_INSUFICIENTE = "Saldo Insuficiente!";
     private static final String ERRO_MENSAGEM_CONTA = "Conta inexistente! Abra a conta primeiro.";
 
     public static void main(String[] args){
@@ -34,6 +35,7 @@ public class Aplicacao {
         sb.append("4- Transferir").append("\n");
         sb.append("5- Investir").append("\n");
         sb.append("6- Consultar Saldo das Contas").append("\n");
+        sb.append("7- Resgatar").append("\n");
         sb.append("x- para sair").append("\n");
         sb.append("---------------------------------------------------------------------\n");
         sb.append("--> Indique o número de uma opção acima e de enter: ");
@@ -66,6 +68,7 @@ public class Aplicacao {
             case "4" -> Aplicacao.selecionarOpcaoMenu_4(cliente);
             case "5" -> Aplicacao.selecionarOpcaoMenu_5(cliente);
             case "6" -> Aplicacao.selecionarOpcaoMenu_6(cliente);
+            case "7" -> Aplicacao.selecionarOpcaoMenu_7(cliente);
             case "X" -> System.out.println(Aplicacao.ATE_LOGO_MENSAGEM_PADRAO);
         }
     }
@@ -196,6 +199,24 @@ public class Aplicacao {
         }
     }
 
+    private static void selecionarOpcaoMenu_7(Cliente cliente) {
+        String resposta;
+        if (cliente == null) {
+            System.out.println(ERRO_MENSAGEM_CONTA);
+        } else {
+            try {
+                Aplicacao.resgatar(cliente);
+                resposta = Aplicacao.verificarSeDesejaContinuar();
+
+                if ("N".equals(resposta)) {
+                    Aplicacao.executarSaidaAplicacao(Aplicacao.ATE_LOGO_MENSAGEM_PADRAO);
+                } else interagirMenu();
+
+            } catch (Exception e) {
+                Aplicacao.executarSaidaAplicacao(Aplicacao.ERRO_MENSAGEM_PADRAO);
+            }
+        }
+    }
     private static void abrirConta() throws Exception{
         String nome;
         String documento;
@@ -289,13 +310,16 @@ public class Aplicacao {
         BigDecimal valorSaque = new BigDecimal(dblValorSaque);
 
         String saldoAnterior = cliente.getContasCliente().get(idConta).consultarSaldoFormatadoEmMoedaLocal();
-        cliente.getContasCliente().get(idConta).sacar(cliente, valorSaque);
-        String saldoAtual = cliente.getContasCliente().get(idConta).consultarSaldoFormatadoEmMoedaLocal();
 
-        System.out.println("\n---- Saque realizado com sucesso na conta " + idConta + "! ----");
-        System.out.println("SALDO ANTERIOR: " + saldoAnterior);
-        System.out.println("SALDO ATUAL   : " + saldoAtual);
-        System.out.println("\n");
+        if (verificaSaldoDisponivel(idConta,valorSaque)){
+            cliente.getContasCliente().get(idConta).sacar(cliente, valorSaque);
+            String saldoAtual = cliente.getContasCliente().get(idConta).consultarSaldoFormatadoEmMoedaLocal();
+
+            System.out.println("\n---- Saque realizado com sucesso na conta " + idConta + "! ----");
+            System.out.println("SALDO ANTERIOR: " + saldoAnterior);
+            System.out.println("SALDO ATUAL   : " + saldoAtual);
+            System.out.println("\n");
+        }
     }
 
     public static void investir(Cliente cliente) throws Exception{
@@ -315,23 +339,64 @@ public class Aplicacao {
         BigDecimal valorInvestimento = new BigDecimal(dblValorInvestimento);
 
         String saldoAnteriorOrigem = cliente.getContasCliente().get(idContaOrigem).consultarSaldoFormatadoEmMoedaLocal();
-        cliente.getContasCliente().get(idContaOrigem).sacar(cliente, valorInvestimento);
-        String saldoAtualOrigem = cliente.getContasCliente().get(idContaOrigem).consultarSaldoFormatadoEmMoedaLocal();
+        if (verificaSaldoDisponivel(idContaOrigem,valorInvestimento)){
 
-        String saldoAnteriorDestino = cliente.getContasCliente().get(idContaDestino).consultarSaldoFormatadoEmMoedaLocal();
-        cliente.getContasCliente().get(idContaDestino).investir(cliente, valorInvestimento);
-        String saldoAtualDestino = cliente.getContasCliente().get(idContaDestino).consultarSaldoFormatadoEmMoedaLocal();
+            cliente.getContasCliente().get(idContaOrigem).sacar(cliente, valorInvestimento);
+            String saldoAtualOrigem = cliente.getContasCliente().get(idContaOrigem).consultarSaldoFormatadoEmMoedaLocal();
 
-        //atualizado
-        System.out.println("\n---- Investimento realizado com sucesso na conta " + idContaDestino + "! ----");
-        System.out.println("SALDO ANTERIOR: " + saldoAnteriorDestino);
-        System.out.println("SALDO ATUAL   : " + saldoAtualDestino);
-        System.out.println("\n------------------- Sua conta corrente:  " + idContaOrigem + "! -------------");
-        System.out.println("SALDO ANTERIOR: " + saldoAnteriorOrigem);
-        System.out.println("SALDO ATUAL   : " + saldoAtualOrigem);
-        System.out.println("\n");
+            String saldoAnteriorDestino = cliente.getContasCliente().get(idContaDestino).consultarSaldoFormatadoEmMoedaLocal();
+            cliente.getContasCliente().get(idContaDestino).investir(cliente, valorInvestimento);
+            String saldoAtualDestino = cliente.getContasCliente().get(idContaDestino).consultarSaldoFormatadoEmMoedaLocal();
+
+            //atualizado
+            System.out.println("\n---- Investimento realizado com sucesso na conta " + idContaDestino + "! ----");
+            System.out.println("SALDO ANTERIOR: " + saldoAnteriorDestino);
+            System.out.println("SALDO ATUAL   : " + saldoAtualDestino);
+            System.out.println("\n------------------- Sua conta corrente:  " + idContaOrigem + "! -------------");
+            System.out.println("SALDO ANTERIOR: " + saldoAnteriorOrigem);
+            System.out.println("SALDO ATUAL   : " + saldoAtualOrigem);
+            System.out.println("\n");
+
+        }
     }
 
+    public static void resgatar(Cliente cliente) throws Exception{
+        int idContaOrigem;
+        int idContaDestino;
+        double dblValorResgate;
+
+        Scanner leitorTela = new Scanner(System.in);
+        System.out.printf("Informe o numero de identificação da conta investimento ou poupança  : ID ");
+        idContaOrigem = leitorTela.nextInt();
+
+        System.out.printf("Informe o numero de identificação da conta destino  : ID ");
+        idContaDestino = leitorTela.nextInt();
+
+        System.out.printf("Informe o valor do resgate (ex 1100,50)  : R$ ");
+        dblValorResgate = leitorTela.nextDouble();
+        BigDecimal valorResgate = new BigDecimal(dblValorResgate);
+
+        String saldoAnteriorOrigem = cliente.getContasCliente().get(idContaOrigem).consultarSaldoFormatadoEmMoedaLocal();
+
+        if (verificaSaldoDisponivel(idContaOrigem,valorResgate)){
+            cliente.getContasCliente().get(idContaOrigem).sacar(cliente, valorResgate);
+
+            String saldoAtualOrigem = cliente.getContasCliente().get(idContaOrigem).consultarSaldoFormatadoEmMoedaLocal();
+
+            String saldoAnteriorDestino = cliente.getContasCliente().get(idContaDestino).consultarSaldoFormatadoEmMoedaLocal();
+            cliente.getContasCliente().get(idContaDestino).depositar(cliente, valorResgate);
+            String saldoAtualDestino = cliente.getContasCliente().get(idContaDestino).consultarSaldoFormatadoEmMoedaLocal();
+
+            //atualizado
+            System.out.println("\n---- Resgate realizado com sucesso na conta " + idContaDestino + "! ----");
+            System.out.println("SALDO ANTERIOR: " + saldoAnteriorDestino);
+            System.out.println("SALDO ATUAL   : " + saldoAtualDestino);
+            System.out.println("\n------------------- Sua conta de investimento/poupança:  " + idContaOrigem + "! -------------");
+            System.out.println("SALDO ANTERIOR: " + saldoAnteriorOrigem);
+            System.out.println("SALDO ATUAL   : " + saldoAtualOrigem);
+            System.out.println("\n");
+        }
+    }
     public static void transferir(Cliente cliente) throws Exception{
         int idConta;
         double dblValorTransferencia;
@@ -345,13 +410,15 @@ public class Aplicacao {
         BigDecimal valorSaque = new BigDecimal(dblValorTransferencia);
 
         String saldoAnterior = cliente.getContasCliente().get(idConta).consultarSaldoFormatadoEmMoedaLocal();
-        cliente.getContasCliente().get(idConta).transferir(cliente, valorSaque);
-        String saldoAtual = cliente.getContasCliente().get(idConta).consultarSaldoFormatadoEmMoedaLocal();
+        if (verificaSaldoDisponivel(idConta,valorSaque)) {
+            cliente.getContasCliente().get(idConta).transferir(cliente, valorSaque);
+            String saldoAtual = cliente.getContasCliente().get(idConta).consultarSaldoFormatadoEmMoedaLocal();
 
-        System.out.println("\n---- Transferência realizada com sucesso na conta " + idConta + "! ----");
-        System.out.println("SALDO ANTERIOR: " + saldoAnterior);
-        System.out.println("SALDO ATUAL   : " + saldoAtual);
-        System.out.println("\n");
+            System.out.println("\n---- Transferência realizada com sucesso na conta " + idConta + "! ----");
+            System.out.println("SALDO ANTERIOR: " + saldoAnterior);
+            System.out.println("SALDO ATUAL   : " + saldoAtual);
+            System.out.println("\n");
+        }
     }
 
     public static void imprimirSaldos(Cliente cliente){
@@ -363,5 +430,18 @@ public class Aplicacao {
                             + mensagem
                             + "\n----------------------------------\n");
         System.exit(0);
+    }
+
+    private static boolean verificaSaldoDisponivel(int idConta, BigDecimal valorSaque){
+        BigDecimal valorSaldoCompara = cliente.getContasCliente().get(idConta).consultarSaldo();
+        if (valorSaldoCompara.compareTo(valorSaque)<0){
+            System.out.println(ERRO_SALDO_INSUFICIENTE);
+            return false;
+        }
+        else {
+            return true;
+        }
+
+
     }
 }
