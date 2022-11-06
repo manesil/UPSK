@@ -72,18 +72,22 @@ public abstract class Conta {
     public abstract void investir(Cliente cliente, BigDecimal valorInvestimento) throws Exception;
 
     public void sacar(Cliente cliente, BigDecimal valorSaque)  throws Exception{
-        if (   this.consultarSaldo().doubleValue() <= 0
+/*        if (   this.consultarSaldo().doubleValue() <= 0
                 || this.consultarSaldo().doubleValue() < valorSaque.doubleValue() ){
-            throw new Exception("INFO: Nao ha saldo suficiente na " + TipoContas.CONTA_POUPANCA);
+            throw new Exception("INFO: Nao ha saldo suficiente na conta");
         }
-
+*/
         double taxa = pegarTaxa(cliente);
 
         double novoSaldo = this.consultarSaldo().doubleValue();
         double imposto = valorSaque.doubleValue() * taxa;
         novoSaldo -= valorSaque.doubleValue() - imposto;
-
-        this.atualizarSaldo(new BigDecimal(novoSaldo));
+        if (   novoSaldo < 0 ){
+            throw new Exception("INFO: Nao ha saldo suficiente na conta");
+        }
+        else {
+            this.atualizarSaldo(new BigDecimal(novoSaldo));
+        }
     }
     public void sacarSemTaxa(Cliente cliente, BigDecimal valorSaque)  throws Exception{
         if (   this.consultarSaldo().doubleValue() <= 0
