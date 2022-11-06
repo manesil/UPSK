@@ -50,15 +50,15 @@ public class Cliente {
         this.nomeCliente = nomeCliente;
     }
 
-    public Integer abrirConta(String tipo){
+    public Conta abrirConta(String tipo){
         Random idConta = new Random();
         Integer intIDConta = idConta.nextInt(1000);
         conta = new Conta(intIDConta,tipo);
         contas.add(intIDConta);
-        return intIDConta;
+        return conta;
     }
-    public void efetuarDeposito(Integer idConta, BigDecimal valorDeposito){
-        conta.efetuarDepósito(idConta,valorDeposito,this.conta.getTipo());
+    public void efetuarDeposito(Conta conta, BigDecimal valorDeposito){
+        conta.efetuarDepósito(conta.getIdConta(),valorDeposito,this.conta.getTipo());
     }
 
 

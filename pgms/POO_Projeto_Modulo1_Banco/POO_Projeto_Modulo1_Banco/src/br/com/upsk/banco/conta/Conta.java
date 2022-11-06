@@ -4,6 +4,7 @@ import br.com.upsk.banco.cliente.Cliente;
 
 import java.math.BigDecimal;
 import java.util.Objects;
+import java.util.function.BiFunction;
 
 public class Conta {
 
@@ -79,18 +80,19 @@ public class Conta {
     }
 
     //TODO: Bruna
-    public void EfetuarSaque(BigDecimal valorSaque, String idConta){
+    public void efetuarSaque(BigDecimal valorSaque, Integer idConta){
         //pessoa juridica paga 0,5%
 
     }
 
     //TODO: Andreia
-    public void EfetuarTransferencia(BigDecimal valorTransferencia, String idContaOrigem, String idContaDestino){
+    public void efetuarTransferencia(BigDecimal valorTransferencia, Integer idContaOrigem, Integer idContaDestino){
         //pessoa juridica paga 0,5% para transferir outra titularidade
 
     }
 
-    public BigDecimal ConsultarSaldo(String idConta){
+    public BigDecimal consultarSaldo(Integer idConta){
+
         return getSaldoConta();
     }
 
@@ -100,5 +102,17 @@ public class Conta {
     }
 
     //TODO: IZA Investir/resgate
+    public void investirValor(BigDecimal valorInvestimento, Conta contaDestino){
+        Integer idcontaOrigem = this.idConta;
+        BigDecimal saldoDisponivel = consultarSaldo(idcontaOrigem);
+        if (saldoDisponivel.doubleValue()>0){
+            efetuarSaque(valorInvestimento, idcontaOrigem);
+            efetuarDepósito(contaDestino.getIdConta(), valorInvestimento, contaDestino.getTipo());
+        }
+        else {
+            System.out.println("Sem saldo na conta.Investimento não realizado.");
+        }
+
+    }
 
 }
