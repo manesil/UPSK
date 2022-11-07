@@ -34,8 +34,8 @@ public class Aplicacao {
         sb.append("3- Sacar").append("\n");
         sb.append("4- Transferir").append("\n");
         sb.append("5- Investir").append("\n");
-        sb.append("6- Consultar Saldo das Contas").append("\n");
-        sb.append("7- Resgatar").append("\n");
+        sb.append("6- Resgatar").append("\n");
+        sb.append("7- Consultar Saldo das Contas").append("\n");
         sb.append("x- para sair").append("\n");
         sb.append("---------------------------------------------------------------------\n");
         sb.append("--> Indique o número de uma opção acima e de enter: ");
@@ -177,7 +177,26 @@ public class Aplicacao {
         }
     }
 
-    private static void selecionarOpcaoMenu_6(Cliente cliente){
+    private static void selecionarOpcaoMenu_6(Cliente cliente) {
+        String resposta;
+        if (cliente == null) {
+            System.out.println(ERRO_MENSAGEM_CONTA);
+        } else {
+            try {
+                Aplicacao.resgatar(cliente);
+                resposta = Aplicacao.verificarSeDesejaContinuar();
+
+                if ("N".equals(resposta)) {
+                    Aplicacao.executarSaidaAplicacao(Aplicacao.ATE_LOGO_MENSAGEM_PADRAO);
+                } else interagirMenu();
+
+            } catch (Exception e) {
+                Aplicacao.executarSaidaAplicacao(Aplicacao.ERRO_MENSAGEM_PADRAO);
+            }
+        }
+    }
+
+    private static void selecionarOpcaoMenu_7(Cliente cliente){
         String resposta;
 
         if (cliente == null) {
@@ -199,24 +218,7 @@ public class Aplicacao {
         }
     }
 
-    private static void selecionarOpcaoMenu_7(Cliente cliente) {
-        String resposta;
-        if (cliente == null) {
-            System.out.println(ERRO_MENSAGEM_CONTA);
-        } else {
-            try {
-                Aplicacao.resgatar(cliente);
-                resposta = Aplicacao.verificarSeDesejaContinuar();
 
-                if ("N".equals(resposta)) {
-                    Aplicacao.executarSaidaAplicacao(Aplicacao.ATE_LOGO_MENSAGEM_PADRAO);
-                } else interagirMenu();
-
-            } catch (Exception e) {
-                Aplicacao.executarSaidaAplicacao(Aplicacao.ERRO_MENSAGEM_PADRAO);
-            }
-        }
-    }
     private static void abrirConta() throws Exception{
         String nome;
         String documento;
