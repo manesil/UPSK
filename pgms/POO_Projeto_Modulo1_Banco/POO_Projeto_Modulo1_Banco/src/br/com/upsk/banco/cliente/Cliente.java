@@ -1,6 +1,6 @@
-package br.com.upsk.banco.cliente;
+package src.br.com.upsk.banco.cliente;
 
-import br.com.upsk.banco.conta.Conta;
+import src.br.com.upsk.banco.conta.Conta;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

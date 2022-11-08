@@ -109,6 +109,16 @@ public abstract class Cliente {
         System.out.println(sb);
     }
 
+    public boolean clientePossuiConta(Integer idConta){
+        boolean clientePossuiConta = false;
+
+        if (this.getContasCliente().containsKey(idConta)){
+            clientePossuiConta = true;
+        }
+
+        return clientePossuiConta;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Cliente{");

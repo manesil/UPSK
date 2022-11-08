@@ -1,6 +1,6 @@
-package br.com.upsk.banco.conta;
+package src.br.com.upsk.banco.conta;
 
-import br.com.upsk.banco.cliente.Cliente;
+import src.br.com.upsk.banco.cliente.Cliente;
 
 import java.math.BigDecimal;
 
@@ -159,8 +159,8 @@ public class Conta {
         Integer idcontaOrigem = this.idConta;
         BigDecimal saldoDisponivel = consultarSaldo(idcontaOrigem);
         if (saldoDisponivel.doubleValue()>0){
-            efetuarSaque(valorInvestimento, idcontaOrigem);
-            efetuarDepósito(contaDestino.getIdConta(), valorInvestimento, contaDestino.getTipo());
+            efetuarSaque(Integer.valueOf(idcontaOrigem), valorInvestimento, contaDestino.getTipo());
+            //efetuarDepósito(contaDestino.getIdConta(), valorInvestimento, contaDestino.getTipo());
         }
         else {
             System.out.println("Sem saldo na conta.Investimento não realizado.");

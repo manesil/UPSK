@@ -5,6 +5,7 @@ import br.com.upsk.banco.pooprojeto.cliente.ClientePJ;
 import br.com.upsk.banco.pooprojeto.cliente.TipoContas;
 import br.com.upsk.banco.pooprojeto.cliente.TipoDocumentos;
 import br.com.upsk.banco.pooprojeto.conta.Conta;
+import br.com.upsk.banco.pooprojeto.conta.ContaCorrente;
 
 import java.math.BigDecimal;
 import java.util.Scanner;
@@ -14,8 +15,9 @@ public class Aplicacao {
     private static Cliente cliente = null;
     private static final String ERRO_MENSAGEM_PADRAO = "Algo não funcionou bem :( ... Desculpe! Execute novamente a Aplicação";
     private static final String ATE_LOGO_MENSAGEM_PADRAO = "ATÉ LOGO!!!";
+    private static final String ERRO_CONTA_INEXISTENTE = "Identificação da conta incorreta. Favor verificar. Utilize a funcionalidade para consultar contas associadas.\n";
 
-        private static final String ERRO_SALDO_INSUFICIENTE = "Saldo Insuficiente!";
+    private static final String ERRO_SALDO_INSUFICIENTE = "Saldo Insuficiente!";
     private static final String ERRO_MENSAGEM_CONTA = "Conta inexistente! Abra a conta primeiro.";
 
     public static void main(String[] args){
@@ -29,14 +31,18 @@ public class Aplicacao {
 
         sb.append("OLÁ! ").append("\n");
         sb.append("---------------------------------------------------------------------\n");
-        sb.append("1- Abrir Conta").append("\n");
-        sb.append("2- Depositar").append("\n");
-        sb.append("3- Sacar").append("\n");
-        sb.append("4- Transferir").append("\n");
-        sb.append("5- Investir").append("\n");
-        sb.append("6- Resgatar").append("\n");
-        sb.append("7- Consultar Saldo das Contas").append("\n");
-        sb.append("x- para sair").append("\n");
+        if(Aplicacao.cliente != null) {
+            sb.append("1- Abrir Conta").append("\n");
+            sb.append("2- Depositar").append("\n");
+            sb.append("3- Sacar").append("\n");
+            sb.append("4- Transferir").append("\n");
+            sb.append("5- Investir").append("\n");
+            sb.append("6- Resgatar").append("\n");
+            sb.append("7- Consultar Saldo das Contas").append("\n");
+            sb.append("x- para sair").append("\n");
+        }else{
+            sb.append("1- Abrir Conta").append("\n");
+        }
         sb.append("---------------------------------------------------------------------\n");
         sb.append("--> Indique o número de uma opção acima e de enter: ");
 
@@ -239,8 +245,16 @@ public class Aplicacao {
             TipoDocumentos enumTipoDocumentos;
             if ("CPF".equalsIgnoreCase(tipoDocumento)) {
                 enumTipoDocumentos = TipoDocumentos.CPF;
+                if (documento.length() < 11){
+                    System.out.println("Numero do documento incorreto. Favor verificar");
+                    throw new Exception("Refazer processo. Informações incorretas");
+                }
             } else if ("CNPJ".equalsIgnoreCase(tipoDocumento)) {
                 enumTipoDocumentos = TipoDocumentos.CNPJ;
+                if (documento.length() < 14){
+                    System.out.println("Numero do documento incorreto. Favor verificar");
+                    throw new Exception("Refazer processo. Informações incorretas");
+                }
             } else {
                 throw new Exception("Algo deu errado! Verificar tipo de documento informado");
             }
@@ -285,18 +299,22 @@ public class Aplicacao {
         System.out.printf("Informe o numero de identificação da conta    : ID ");
         idConta = leitorTela.nextInt();
 
-        System.out.printf("Informe o valor do depósito (ex 1100,50)      : R$ ");
-        dblValorDeposito = leitorTela.nextDouble();
-        BigDecimal valorDeposito = new BigDecimal(dblValorDeposito);
+        if (cliente.clientePossuiConta(idConta)) {
+            System.out.printf("Informe o valor do depósito (ex 1100,50)      : R$ ");
+            dblValorDeposito = leitorTela.nextDouble();
+            BigDecimal valorDeposito = new BigDecimal(dblValorDeposito);
 
-        String saldoAnterior = cliente.getContasCliente().get(idConta).consultarSaldoFormatadoEmMoedaLocal();
-        cliente.getContasCliente().get(idConta).depositar(cliente, valorDeposito);
-        String saldoAtual = cliente.getContasCliente().get(idConta).consultarSaldoFormatadoEmMoedaLocal();
+            String saldoAnterior = cliente.getContasCliente().get(idConta).consultarSaldoFormatadoEmMoedaLocal();
+            cliente.getContasCliente().get(idConta).depositar(cliente, valorDeposito);
+            String saldoAtual = cliente.getContasCliente().get(idConta).consultarSaldoFormatadoEmMoedaLocal();
 
-        System.out.println("\n---- Depósito realizado com sucesso na conta " + idConta + "! ----");
-        System.out.println("SALDO ANTERIOR: " + saldoAnterior);
-        System.out.println("SALDO ATUAL   : " + saldoAtual);
-        System.out.println("\n");
+            System.out.println("\n---- Depósito realizado com sucesso na conta " + idConta + "! ----");
+            System.out.println("SALDO ANTERIOR: " + saldoAnterior);
+            System.out.println("SALDO ATUAL   : " + saldoAtual);
+            System.out.println("\n");
+        }else{
+            System.out.println(Aplicacao.ERRO_CONTA_INEXISTENTE);
+        }
     }
 
     public static void sacar(Cliente cliente) throws Exception{
@@ -307,58 +325,55 @@ public class Aplicacao {
         System.out.printf("Informe o numero de identificação da conta : ID ");
         idConta = leitorTela.nextInt();
 
-        System.out.printf("Informe o valor do saque (ex 1100,50)      : R$ ");
-        dblValorSaque = leitorTela.nextDouble();
-        BigDecimal valorSaque = new BigDecimal(dblValorSaque);
+        if (cliente.clientePossuiConta(idConta)) {
+            System.out.printf("Informe o valor do saque (ex 1100,50)      : R$ ");
+            dblValorSaque = leitorTela.nextDouble();
+            BigDecimal valorSaque = new BigDecimal(dblValorSaque);
 
-        String saldoAnterior = cliente.getContasCliente().get(idConta).consultarSaldoFormatadoEmMoedaLocal();
+            if (verificaSaldoDisponivel(idConta, valorSaque)) {
+                String saldoAnterior = cliente.getContasCliente().get(idConta).consultarSaldoFormatadoEmMoedaLocal();
+                cliente.getContasCliente().get(idConta).sacar(cliente, valorSaque);
+                String saldoAtual = cliente.getContasCliente().get(idConta).consultarSaldoFormatadoEmMoedaLocal();
 
-        if (verificaSaldoDisponivel(idConta,valorSaque)){
-            cliente.getContasCliente().get(idConta).sacar(cliente, valorSaque);
-            String saldoAtual = cliente.getContasCliente().get(idConta).consultarSaldoFormatadoEmMoedaLocal();
-
-            System.out.println("\n---- Saque realizado com sucesso na conta " + idConta + "! ----");
-            System.out.println("SALDO ANTERIOR: " + saldoAnterior);
-            System.out.println("SALDO ATUAL   : " + saldoAtual);
-            System.out.println("\n");
+                System.out.println("\n---- Saque realizado com sucesso na conta " + idConta + "! ----");
+                System.out.println("SALDO ANTERIOR: " + saldoAnterior);
+                System.out.println("SALDO ATUAL   : " + saldoAtual);
+                System.out.println("\n");
+            }else{
+                System.out.println(Aplicacao.ERRO_SALDO_INSUFICIENTE);
+            }
+        }else{
+            System.out.println(Aplicacao.ERRO_CONTA_INEXISTENTE);
         }
     }
 
     public static void investir(Cliente cliente) throws Exception{
-        int idContaOrigem;
-        int idContaDestino;
+        int idConta;
         double dblValorInvestimento;
 
         Scanner leitorTela = new Scanner(System.in);
-        System.out.printf("Informe o numero de identificação da conta origem  : ID ");
-        idContaOrigem = leitorTela.nextInt();
+        System.out.printf("Informe o numero de identificação da conta    : ID ");
+        idConta = leitorTela.nextInt();
 
-        System.out.printf("Informe o numero de identificação da conta investimento ou poupança  : ID ");
-        idContaDestino = leitorTela.nextInt();
+        if (cliente.clientePossuiConta(idConta)) {
+            if (cliente.getContasCliente().get(idConta) instanceof ContaCorrente) {
+                System.out.println("Não é possível fazer investimento na CC. Favor informar uma conta Poupança ou de Investimento");
+            } else {
+                System.out.printf("Informe o valor do investimento (ex 1100,50)  : R$ ");
+                dblValorInvestimento = leitorTela.nextDouble();
+                BigDecimal valorInvestimento = new BigDecimal(dblValorInvestimento);
 
-        System.out.printf("Informe o valor do investimento (ex 1100,50)  : R$ ");
-        dblValorInvestimento = leitorTela.nextDouble();
-        BigDecimal valorInvestimento = new BigDecimal(dblValorInvestimento);
+                String saldoAnterior = cliente.getContasCliente().get(idConta).consultarSaldoFormatadoEmMoedaLocal();
+                cliente.getContasCliente().get(idConta).investir(cliente, valorInvestimento);
+                String saldoAtual = cliente.getContasCliente().get(idConta).consultarSaldoFormatadoEmMoedaLocal();
 
-        String saldoAnteriorOrigem = cliente.getContasCliente().get(idContaOrigem).consultarSaldoFormatadoEmMoedaLocal();
-        if (verificaSaldoDisponivel(idContaOrigem,valorInvestimento)){
-
-            cliente.getContasCliente().get(idContaOrigem).sacarSemTaxa(cliente, valorInvestimento);
-            String saldoAtualOrigem = cliente.getContasCliente().get(idContaOrigem).consultarSaldoFormatadoEmMoedaLocal();
-
-            String saldoAnteriorDestino = cliente.getContasCliente().get(idContaDestino).consultarSaldoFormatadoEmMoedaLocal();
-            cliente.getContasCliente().get(idContaDestino).investir(cliente, valorInvestimento);
-            String saldoAtualDestino = cliente.getContasCliente().get(idContaDestino).consultarSaldoFormatadoEmMoedaLocal();
-
-            //atualizado
-            System.out.println("\n---- Investimento realizado com sucesso na conta " + idContaDestino + "! ----");
-            System.out.println("SALDO ANTERIOR: " + saldoAnteriorDestino);
-            System.out.println("SALDO ATUAL   : " + saldoAtualDestino);
-            System.out.println("\n------------------- Sua conta corrente:  " + idContaOrigem + "! -------------");
-            System.out.println("SALDO ANTERIOR: " + saldoAnteriorOrigem);
-            System.out.println("SALDO ATUAL   : " + saldoAtualOrigem);
-            System.out.println("\n");
-
+                System.out.println("\n---- Investimento realizado com sucesso na conta " + idConta + "! ----");
+                System.out.println("SALDO ANTERIOR: " + saldoAnterior);
+                System.out.println("SALDO ATUAL   : " + saldoAtual);
+                System.out.println("\n");
+            }
+        }else {
+            System.out.println(Aplicacao.ERRO_CONTA_INEXISTENTE);
         }
     }
 
@@ -371,32 +386,38 @@ public class Aplicacao {
         System.out.printf("Informe o numero de identificação da conta investimento ou poupança  : ID ");
         idContaOrigem = leitorTela.nextInt();
 
-        System.out.printf("Informe o numero de identificação da conta destino  : ID ");
-        idContaDestino = leitorTela.nextInt();
+        if (cliente.clientePossuiConta(idContaOrigem)) {
+            System.out.printf("Informe o numero de identificação da conta destino  : ID ");
+            idContaDestino = leitorTela.nextInt();
 
-        System.out.printf("Informe o valor do resgate (ex 1100,50)  : R$ ");
-        dblValorResgate = leitorTela.nextDouble();
-        BigDecimal valorResgate = new BigDecimal(dblValorResgate);
+            System.out.printf("Informe o valor do resgate (ex 1100,50)  : R$ ");
+            dblValorResgate = leitorTela.nextDouble();
+            BigDecimal valorResgate = new BigDecimal(dblValorResgate);
 
-        String saldoAnteriorOrigem = cliente.getContasCliente().get(idContaOrigem).consultarSaldoFormatadoEmMoedaLocal();
+            String saldoAnteriorOrigem = cliente.getContasCliente().get(idContaOrigem).consultarSaldoFormatadoEmMoedaLocal();
 
-        if (verificaSaldoDisponivel(idContaOrigem,valorResgate)){
-            cliente.getContasCliente().get(idContaOrigem).sacarSemTaxa(cliente, valorResgate);
+            if (verificaSaldoDisponivel(idContaOrigem, valorResgate)) {
+                cliente.getContasCliente().get(idContaOrigem).sacarSemTaxa(cliente, valorResgate);
 
-            String saldoAtualOrigem = cliente.getContasCliente().get(idContaOrigem).consultarSaldoFormatadoEmMoedaLocal();
+                String saldoAtualOrigem = cliente.getContasCliente().get(idContaOrigem).consultarSaldoFormatadoEmMoedaLocal();
 
-            String saldoAnteriorDestino = cliente.getContasCliente().get(idContaDestino).consultarSaldoFormatadoEmMoedaLocal();
-            cliente.getContasCliente().get(idContaDestino).depositar(cliente, valorResgate);
-            String saldoAtualDestino = cliente.getContasCliente().get(idContaDestino).consultarSaldoFormatadoEmMoedaLocal();
+                String saldoAnteriorDestino = cliente.getContasCliente().get(idContaDestino).consultarSaldoFormatadoEmMoedaLocal();
+                cliente.getContasCliente().get(idContaDestino).depositar(cliente, valorResgate);
+                String saldoAtualDestino = cliente.getContasCliente().get(idContaDestino).consultarSaldoFormatadoEmMoedaLocal();
 
-            //atualizado
-            System.out.println("\n---- Resgate realizado com sucesso na conta " + idContaDestino + "! ----");
-            System.out.println("SALDO ANTERIOR: " + saldoAnteriorDestino);
-            System.out.println("SALDO ATUAL   : " + saldoAtualDestino);
-            System.out.println("\n------------------- Sua conta de investimento/poupança:  " + idContaOrigem + "! -------------");
-            System.out.println("SALDO ANTERIOR: " + saldoAnteriorOrigem);
-            System.out.println("SALDO ATUAL   : " + saldoAtualOrigem);
-            System.out.println("\n");
+                //atualizado
+                System.out.println("\n---- Resgate realizado com sucesso na conta " + idContaDestino + "! ----");
+                System.out.println("SALDO ANTERIOR: " + saldoAnteriorDestino);
+                System.out.println("SALDO ATUAL   : " + saldoAtualDestino);
+                System.out.println("\n------------------- Sua conta de investimento/poupança:  " + idContaOrigem + "! -------------");
+                System.out.println("SALDO ANTERIOR: " + saldoAnteriorOrigem);
+                System.out.println("SALDO ATUAL   : " + saldoAtualOrigem);
+                System.out.println("\n");
+            } else {
+                System.out.println(Aplicacao.ERRO_SALDO_INSUFICIENTE);
+            }
+        }else {
+            System.out.println(Aplicacao.ERRO_CONTA_INEXISTENTE);
         }
     }
     public static void transferir(Cliente cliente) throws Exception{
@@ -407,19 +428,25 @@ public class Aplicacao {
         System.out.printf("Informe o numero de identificação da conta : ID ");
         idConta = leitorTela.nextInt();
 
-        System.out.printf("Informe valor da transferência (ex 1100,50): R$ ");
-        dblValorTransferencia = leitorTela.nextDouble();
-        BigDecimal valorSaque = new BigDecimal(dblValorTransferencia);
+        if (cliente.clientePossuiConta(idConta)) {
+            System.out.printf("Informe valor da transferência (ex 1100,50): R$ ");
+            dblValorTransferencia = leitorTela.nextDouble();
+            BigDecimal valorSaque = new BigDecimal(dblValorTransferencia);
 
-        String saldoAnterior = cliente.getContasCliente().get(idConta).consultarSaldoFormatadoEmMoedaLocal();
-        if (verificaSaldoDisponivel(idConta,valorSaque)) {
-            cliente.getContasCliente().get(idConta).transferir(cliente, valorSaque);
-            String saldoAtual = cliente.getContasCliente().get(idConta).consultarSaldoFormatadoEmMoedaLocal();
+            String saldoAnterior = cliente.getContasCliente().get(idConta).consultarSaldoFormatadoEmMoedaLocal();
+            if (verificaSaldoDisponivel(idConta,valorSaque)) {
+                cliente.getContasCliente().get(idConta).transferir(cliente, valorSaque);
+                String saldoAtual = cliente.getContasCliente().get(idConta).consultarSaldoFormatadoEmMoedaLocal();
 
-            System.out.println("\n---- Transferência realizada com sucesso na conta " + idConta + "! ----");
-            System.out.println("SALDO ANTERIOR: " + saldoAnterior);
-            System.out.println("SALDO ATUAL   : " + saldoAtual);
-            System.out.println("\n");
+                System.out.println("\n---- Transferência realizada com sucesso na conta " + idConta + "! ----");
+                System.out.println("SALDO ANTERIOR: " + saldoAnterior);
+                System.out.println("SALDO ATUAL   : " + saldoAtual);
+                System.out.println("\n");
+            }else{
+                System.out.println(Aplicacao.ERRO_SALDO_INSUFICIENTE);
+            }
+        }else {
+            System.out.println(Aplicacao.ERRO_CONTA_INEXISTENTE);
         }
     }
 
@@ -443,7 +470,5 @@ public class Aplicacao {
         else {
             return true;
         }
-
-
     }
 }
