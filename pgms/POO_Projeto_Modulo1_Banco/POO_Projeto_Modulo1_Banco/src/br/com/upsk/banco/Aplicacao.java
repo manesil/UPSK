@@ -1,6 +1,7 @@
-package br.com.upsk.banco;
+package src.br.com.upsk.banco;
 
-import br.com.upsk.banco.cliente.Cliente;
+import src.br.com.upsk.banco.cliente.Cliente;
+import src.br.com.upsk.banco.conta.Conta;
 
 import java.math.BigDecimal;
 import java.util.Scanner;
@@ -107,7 +108,7 @@ public class Aplicacao {
     }
 
     private static Integer solicitarAberturaConta(Cliente nossoCliente) {
-        Integer idConta;
+        Conta conta;
         Scanner capturarTela = new Scanner(System.in);
         System.out.printf("\n===============================================================================");
         System.out.printf("\n==  Banco ITI+                                                               ==");
@@ -120,7 +121,8 @@ public class Aplicacao {
         System.out.printf("\n==  Digite o CPF/CNPJ do cliente:                                            ==  => ");
         nossoCliente.setIdCliente(capturarTela.next().toString());
         System.out.printf("\n==  Digite o tipo de conta                                                   ==  => ");
-        idConta = nossoCliente.abrirConta( capturarTela.next().toString());
+        String tipoContaDigitada = capturarTela.next();
+        conta = nossoCliente.abrirConta(tipoContaDigitada);
         System.out.printf("\n===============================================================================");
 
         System.out.printf("\n===============================================================================");
@@ -131,10 +133,10 @@ public class Aplicacao {
         System.out.printf("\n==  Tipo:              %s ", nossoCliente.getTipoCliente());
         System.out.printf("\n==  CPF/CNPJ:          %s ", nossoCliente.getIdCliente());
         System.out.printf("\n==  Tipo de conta      %s ", nossoCliente.toString());
-        System.out.printf("\n==  Id Conta           %d ", idConta);
+        System.out.printf("\n==  Id Conta           %d ", conta.getIdConta());
         System.out.printf("\n===============================================================================");
 
-        return idConta;
+        return conta.getIdConta();
     }
 
 

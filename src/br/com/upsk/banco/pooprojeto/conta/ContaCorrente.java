@@ -17,9 +17,8 @@ public class ContaCorrente extends Conta {
         if ( valorDeposito!= null && valorDeposito.doubleValue() <= 0 ){
             throw new Exception("INFO: Valor de deposito invalido" );
         }
-
-        double novoSaldo =  this.consultarSaldo().doubleValue() + valorDeposito.doubleValue();
-        this.atualizarSaldo(new BigDecimal(novoSaldo));
+        BigDecimal novoSaldo =  this.consultarSaldo().add(valorDeposito);
+        this.atualizarSaldo(novoSaldo);
     }
 
     @Override

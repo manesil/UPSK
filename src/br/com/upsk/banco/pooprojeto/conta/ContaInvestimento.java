@@ -21,9 +21,14 @@ public class ContaInvestimento extends Conta{
         }
 
         double rendimento = pegarRendimento(cliente);
-        double valorDepositoComRendimento = valorDeposito.doubleValue() + (valorDeposito.doubleValue() * rendimento);
-        double novoSaldo =  this.consultarSaldo().doubleValue() + valorDepositoComRendimento;
-        this.atualizarSaldo(new BigDecimal(novoSaldo));
+
+        //double valorDepositoComRendimento = valorDeposito.doubleValue() + (valorDeposito.doubleValue() * rendimento);
+        BigDecimal valorDepositoComRendimento = valorDeposito.multiply(new BigDecimal(rendimento)).add(valorDeposito);
+        //BigDecimal valorDepositoComRendimento = valorDeposito.add(valorDepositoComRendimento);
+        //double novoSaldo =  this.consultarSaldo().doubleValue() + valorDepositoComRendimento;
+        BigDecimal novoSaldo =  this.consultarSaldo().add(valorDepositoComRendimento);
+        //this.atualizarSaldo(new BigDecimal(novoSaldo));
+        this.atualizarSaldo(novoSaldo);
     }
 
     @Override
