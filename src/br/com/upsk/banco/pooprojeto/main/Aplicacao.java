@@ -400,23 +400,24 @@ public class Aplicacao {
         }
     }
     public static void transferir(Cliente cliente) throws Exception{
-        int idConta;
+        int idContaOrigem;
+
         double dblValorTransferencia;
 
         Scanner leitorTela = new Scanner(System.in);
-        System.out.printf("Informe o numero de identificação da conta : ID ");
-        idConta = leitorTela.nextInt();
+        System.out.printf("Informe o numero de identificação da conta origem: ID ");
+        idContaOrigem = leitorTela.nextInt();
 
         System.out.printf("Informe valor da transferência (ex 1100,50): R$ ");
         dblValorTransferencia = leitorTela.nextDouble();
         BigDecimal valorSaque = new BigDecimal(dblValorTransferencia);
 
-        String saldoAnterior = cliente.getContasCliente().get(idConta).consultarSaldoFormatadoEmMoedaLocal();
-        if (verificaSaldoDisponivel(idConta,valorSaque)) {
-            cliente.getContasCliente().get(idConta).transferir(cliente, valorSaque);
-            String saldoAtual = cliente.getContasCliente().get(idConta).consultarSaldoFormatadoEmMoedaLocal();
+        String saldoAnterior = cliente.getContasCliente().get(idContaOrigem).consultarSaldoFormatadoEmMoedaLocal();
+        if (verificaSaldoDisponivel(idContaOrigem,valorSaque)) {
+            cliente.getContasCliente().get(idContaOrigem).transferir(cliente, valorSaque);
+            String saldoAtual = cliente.getContasCliente().get(idContaOrigem).consultarSaldoFormatadoEmMoedaLocal();
 
-            System.out.println("\n---- Transferência realizada com sucesso na conta " + idConta + "! ----");
+            System.out.println("\n---- Transferência realizada com sucesso na conta " + idContaOrigem + "! ----");
             System.out.println("SALDO ANTERIOR: " + saldoAnterior);
             System.out.println("SALDO ATUAL   : " + saldoAtual);
             System.out.println("\n");
